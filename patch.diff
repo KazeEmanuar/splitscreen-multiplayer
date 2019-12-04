@@ -1,0 +1,3 @@
+Not a git repository
+To compare two paths outside a working tree:
+usage: git diff [--no-index] <path> <path>
