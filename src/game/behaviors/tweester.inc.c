@@ -41,6 +41,7 @@ void ActionTweester0(void) {
 }
 
 void ActionTweester1(void) {
+    struct MarioState *m = gMarioObject->collisionData;
     f32 sp1C = o->oBehParams2ndByte * 0x64;
     o->oUnk1BC = obj_angle_to_home();
     PlaySound(SOUND_ENV_WIND1);
@@ -48,7 +49,7 @@ void ActionTweester1(void) {
         o->oForwardVel = 20.0f;
         obj_rotate_yaw_toward(o->oAngleToMario, 0x200);
         print_debug_top_down_objectinfo("off ", 0);
-        if (gMarioStates->action == ACT_TWIRLING)
+        if (m->action == ACT_TWIRLING)
             o->oSubAction++;
     } else {
         o->oForwardVel = 20.0f;

@@ -7,6 +7,7 @@
 
 extern const u8 activePlayers;
 extern u8 luigiCamFirst;
+extern int inEnd;
 extern u8 inStarSelect;
 extern const u8 horizontal;
 struct Controller
@@ -312,6 +313,7 @@ struct MarioState
     /*0xd8*/ s16 sInvulnerable;
     /*0xDA*/ u8 sDelayInvincTimer;
     /*0xDC*/ struct Object *bubble;
+    /*0xE0*/ struct Object *pole;
 };
 
 struct StructGeo802D2360

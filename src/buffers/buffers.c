@@ -18,10 +18,10 @@ u8 gAudioSPTaskYieldBuffer[OS_YIELD_AUDIO_SIZE];
 u8 gUnusedThread2Stack[0x1400];
 #endif
 
-u8 gIdleThreadStack[0x800];
-u8 gThread3Stack[0x2000];
-u8 gThread4Stack[0x2000];
-u8 gThread5Stack[0x2000];
+u8 gIdleThreadStack[0x1800];
+u8 gThread3Stack[0x4000];
+u8 gThread4Stack[0x4000];
+u8 gThread5Stack[0x4000];
 
 // 0xc00 bytes for f3dex, 0x900 otherwise
 u8 gGfxSPTaskYieldBuffer[OS_YIELD_DATA_SIZE];

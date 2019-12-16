@@ -244,7 +244,6 @@ void print_checkinfo(void) {
 }
 
 void print_surfaceinfo(void) {
-    debug_surface_list_info(gMarioObject->oPosX, gMarioObject->oPosZ);
 }
 
 void print_stageinfo(void) {
@@ -350,21 +349,6 @@ void stub_802CA5D0(void) {
  * count, floor misses, and an unknown wall counter) is also printed.
  */
 void try_print_debug_mario_object_info(void) {
-    if (gMarioObject != NULL) {
-        switch (sDebugPage) {
-            case DEBUG_PAGE_CHECKSURFACEINFO:
-                print_surfaceinfo();
-                break;
-            case DEBUG_PAGE_EFFECTINFO:
-                print_effectinfo();
-                break;
-            case DEBUG_PAGE_ENEMYINFO:
-                print_enemyinfo();
-                break;
-            default:
-                break;
-        }
-    }
 
     print_debug_top_down_mapinfo("obj  %d", gObjectCounter);
 

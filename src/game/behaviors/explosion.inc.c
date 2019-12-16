@@ -2,7 +2,8 @@
 
 void bhv_explosion_init(void) {
     create_sound_spawner(SOUND_GENERAL2_BOBOMB_EXPLOSION);
-    set_camera_shake_2(SHAKE_2_UNKNOWN_1);
+    set_camera_shake_2(SHAKE_2_UNKNOWN_1, gMarioStates[0].thisPlayerCamera);
+    set_camera_shake_2(SHAKE_2_UNKNOWN_1, gMarioStates[1].thisPlayerCamera);
 
     o->oOpacity = 255;
 }

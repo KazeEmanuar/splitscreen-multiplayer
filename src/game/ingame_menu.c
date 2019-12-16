@@ -2124,7 +2124,7 @@ void reset_red_coins_collected(void) {
 }
 
 void change_dialog_camera_angle(void) {
-    if (select_or_activate_mario_cam(0) == CAM_ANGLE_LAKITU_MARIO) {
+    if (select_or_activate_mario_cam(0, gCurrLevelCamera) == CAM_ANGLE_LAKITU_MARIO) {
         gDialogCameraAngleIndex = CAM_ANGLE_LAKITU_MARIO;
     } else {
         gDialogCameraAngleIndex = CAM_ANGLE_LAKITU_FIXED;
@@ -2349,10 +2349,12 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 
     switch (index[0]) {
         case 1:
-            select_or_activate_mario_cam(1);
+            select_or_activate_mario_cam(1, gCurrentArea->marioCamera);
+            select_or_activate_mario_cam(1, gCurrentArea->luigiCamera);
             break;
         case 2:
-            select_or_activate_mario_cam(2);
+            select_or_activate_mario_cam(2, gCurrentArea->marioCamera);
+            select_or_activate_mario_cam(2, gCurrentArea->luigiCamera);
             break;
     }
 }

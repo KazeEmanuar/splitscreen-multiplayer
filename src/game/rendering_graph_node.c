@@ -794,7 +794,7 @@ static void geo_process_object(struct Object *node) {
     s32 hasAnimation = (node->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
 
     if (node->header.gfx.unk18 == gCurGraphNodeRoot->areaIndex) {
-        if (node->header.gfx.throwMatrix != NULL) {
+        if (FALSE) {        //KAZE NOTE maybe put this back to the original code and fix the bug properly
             mtxf_mul(gMatStack[gMatStackIndex + 1], (void *) node->header.gfx.throwMatrix,
                      gMatStack[gMatStackIndex]);
         } else if (node->header.gfx.node.flags & 4) {
@@ -1080,7 +1080,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
             geo_process_node_and_siblings(node->node.children);
         }
         gCurGraphNodeRoot = NULL;
-        if (gShowDebugText) {
+        if (FALSE) {
             print_text_fmt_int(180, 36, "MEM %d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
         }

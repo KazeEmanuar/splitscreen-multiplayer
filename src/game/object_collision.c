@@ -15,7 +15,7 @@ struct Object *Unknown802C8460(struct Object *a) {
     for (i = 0; i < a->numCollidedObjs; i++) {
         print_debug_top_down_objectinfo("ON", 0);
         sp24 = a->collidedObjs[i];
-        if ((sp24 != gMarioObject)&(sp24 != gLuigiObject)) {
+        if ((sp24 != gMarioObject) & (sp24 != gLuigiObject)) {
             return sp24;
         }
     }
@@ -30,32 +30,36 @@ int func_802C8504(struct Object *a, struct Object *b) {
     f32 dz = a->oPosZ - b->oPosZ;
     f32 collisionRadius = a->hitboxRadius + b->hitboxRadius;
     f32 distance = sqrtf(dx * dx + dz * dz);
+    struct Object *unused10;
+    struct Object *unused11;
+    unused10 = gMarioObject->unused2;
+    unused11 = gLuigiObject->unused2;
+    if (!(((((a == gLuigiObject) & ((b == gLuigiObject->unused1)|| (b==unused11))) || ((b == gLuigiObject) & ((a == gLuigiObject->unused1)|| (a==unused11))))) || (((a == gMarioObject) & ((b == gMarioObject->unused1)|| (b==unused10))) || ((b == gMarioObject) & ((a == gMarioObject->unused1)|| (a==unused10)))))) {
+        if (collisionRadius > distance) {
+            f32 sp20 = a->hitboxHeight + sp3C;
+            f32 sp1C = b->hitboxHeight + sp38;
 
-    if (collisionRadius > distance) {
-        f32 sp20 = a->hitboxHeight + sp3C;
-        f32 sp1C = b->hitboxHeight + sp38;
-
-        if (sp3C > sp1C) {
-            return 0;
+            if (sp3C > sp1C) {
+                return 0;
+            }
+            if (sp20 < sp38) {
+                return 0;
+            }
+            if (a->numCollidedObjs >= 4) {
+                return 0;
+            }
+            if (b->numCollidedObjs >= 4) {
+                return 0;
+            }
+            a->collidedObjs[a->numCollidedObjs] = b;
+            b->collidedObjs[b->numCollidedObjs] = a;
+            a->collidedObjInteractTypes |= b->oInteractType;
+            b->collidedObjInteractTypes |= a->oInteractType;
+            a->numCollidedObjs++;
+            b->numCollidedObjs++;
+            return 1;
         }
-        if (sp20 < sp38) {
-            return 0;
-        }
-        if (a->numCollidedObjs >= 4) {
-            return 0;
-        }
-        if (b->numCollidedObjs >= 4) {
-            return 0;
-        }
-        a->collidedObjs[a->numCollidedObjs] = b;
-        b->collidedObjs[b->numCollidedObjs] = a;
-        a->collidedObjInteractTypes |= b->oInteractType;
-        b->collidedObjInteractTypes |= a->oInteractType;
-        a->numCollidedObjs++;
-        b->numCollidedObjs++;
-        return 1;
     }
-
     //! no return value
 }
 
@@ -69,7 +73,7 @@ int func_802C870C(struct Object *a, struct Object *b) {
     f32 sp24 = sqrtf(sp34 * sp34 + sp2C * sp2C);
 
     if (a == gMarioObject) {
-        b->oInteractionSubtype |= INT_SUBTYPE_DELAY_INVINCIBILITY;      //FIX HERE
+        b->oInteractionSubtype |= INT_SUBTYPE_DELAY_INVINCIBILITY; // FIX HERE
     }
 
     if (sp28 > sp24) {

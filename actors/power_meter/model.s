@@ -81,10 +81,10 @@ gsSP2Triangles  4,  5,  6, 0x0,  4,  6,  7, 0x0
 gsSPEndDisplayList
 
 vertex_power_meter_health_segments: # 0x03029530
-vertex    -16,    -16,      0,      0,    992,  0xFF, 0xFF, 0xFF, 0xFF
-vertex     15,    -16,      0,    992,    992,  0xFF, 0xFF, 0xFF, 0xFF
-vertex     15,     16,      0,    992,      0,  0xFF, 0xFF, 0xFF, 0xFF
-vertex    -16,     16,      0,      0,      0,  0xFF, 0xFF, 0xFF, 0xFF
+vertex    -12,    -12,      0,      0,    992,  0xFF, 0xFF, 0xFF, 0xFF
+vertex     11,    -12,      0,    992,    992,  0xFF, 0xFF, 0xFF, 0xFF
+vertex     11,     11,      0,    992,      0,  0xFF, 0xFF, 0xFF, 0xFF
+vertex    -12,     11,      0,      0,      0,  0xFF, 0xFF, 0xFF, 0xFF
 
 glabel dl_power_meter_health_segments_begin # 0x03029570 - 0x030295A0
 gsDPPipeSync

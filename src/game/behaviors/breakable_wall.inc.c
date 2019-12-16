@@ -1,7 +1,8 @@
 // breakable_wall.c.inc
 
 void bhv_wf_breakable_wall_loop(void) {
-    if (gMarioStates->action == ACT_SHOT_FROM_CANNON) {
+    struct MarioState *m = gMarioObject->collisionData;
+    if (m->action == ACT_SHOT_FROM_CANNON) {
         obj_become_tangible();
         if (are_objects_collided(o, gMarioObject)) {
             if (obj_has_behavior(bhvWfBreakableWallRight))

@@ -139,14 +139,11 @@ static s32 find_wall_collisions_from_list(struct SurfaceNode *surfaceNode,
                 }
 
                 // If Mario has a vanish cap, pass through the vanish cap wall.
-                if (gCurrentObject != NULL && gCurrentObject == gMarioObject
-                    && (gMarioStates[0].flags & MARIO_VANISH_CAP)) {
-                    continue;
+                if ((gCurrentObject != NULL) && (gCurrentObject == gMarioObject)
+                    && (gMarioStates[gCurrentObject->oAnimState].flags & MARIO_VANISH_CAP)) {
+                        continue;
                 }
-                if (gCurrentObject != NULL && gCurrentObject == gLuigiObject
-                    && (gMarioStates[1].flags & MARIO_VANISH_CAP)) {
-                    continue;
-                }
+                
             }
         }
 

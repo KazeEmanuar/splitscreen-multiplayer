@@ -877,7 +877,7 @@ static s32 act_forward_water_kb(struct MarioState *m) {
 static s32 act_water_shocked(struct MarioState *m) {
     play_sound_if_no_flag(m, SOUND_MARIO_WAAAOOOW, MARIO_ACTION_SOUND_PLAYED);
     play_sound(SOUND_MOVING_SHOCKED, m->marioObj->soundOrigin);
-    set_camera_shake(SHAKE_SHOCK);
+    set_camera_shake(SHAKE_SHOCK, m->thisPlayerCamera);
 
     if (set_mario_animation(m, MARIO_ANIM_SHOCKED) == 0) {
         m->actionTimer++;
@@ -909,6 +909,7 @@ static s32 act_drowning(struct MarioState *m) {
             set_mario_animation(m, MARIO_ANIM_DROWNING_PART2);
             m->marioBodyState->eyeState = MARIO_EYES_DEAD;
             if (m->marioObj->header.gfx.unk38.animFrame == 30) {
+        sSourceWarpNodeId = 0xf1;
                 level_trigger_warp(m, WARP_OP_DEATH);
             }
             break;
@@ -929,6 +930,7 @@ static s32 act_water_death(struct MarioState *m) {
 
     set_mario_animation(m, MARIO_ANIM_WATER_DYING);
     if (set_mario_animation(m, MARIO_ANIM_WATER_DYING) == 35) {
+        sSourceWarpNodeId = 0xf1;
         level_trigger_warp(m, WARP_OP_DEATH);
     }
 
@@ -1033,6 +1035,7 @@ static s32 act_caught_in_whirlpool(struct MarioState *m) {
     if ((marioObj->oMarioWhirlpoolPosY += m->vel[1]) < 0.0f) {
         marioObj->oMarioWhirlpoolPosY = 0.0f;
         if (distance < 16.1f && m->actionTimer++ == 16) {
+        sSourceWarpNodeId = 0xf1;
             level_trigger_warp(m, WARP_OP_DEATH);
         }
     }

@@ -1,19 +1,20 @@
 // kickable_board.c.inc
 
 s32 func_802A9A0C(UNUSED s32 sp18) {
+    struct MarioState *m = gMarioObject->collisionData;
     if (are_objects_collided(o, gMarioObject)) {
         if (abs_angle_diff(o->oMoveAngleYaw, gMarioObject->oMoveAngleYaw) > 0x6000) {
-            if (gMarioStates->action == ACT_SLIDE_KICK)
+            if (m->action == ACT_SLIDE_KICK)
                 return 1;
-            if (gMarioStates->action == ACT_PUNCHING)
+            if (m->action == ACT_PUNCHING)
                 return 1;
-            if (gMarioStates->action == ACT_MOVE_PUNCHING)
+            if (m->action == ACT_MOVE_PUNCHING)
                 return 1;
-            if (gMarioStates->action == ACT_SLIDE_KICK_SLIDE)
+            if (m->action == ACT_SLIDE_KICK_SLIDE)
                 return 1;
-            if (gMarioStates->action == ACT_JUMP_KICK)
+            if (m->action == ACT_JUMP_KICK)
                 return 2;
-            if (gMarioStates->action == ACT_WALL_KICK_AIR)
+            if (m->action == ACT_WALL_KICK_AIR)
                 return 2;
         }
     }

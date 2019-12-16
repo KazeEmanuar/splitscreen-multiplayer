@@ -24,7 +24,7 @@ void func_802AC130(void) {
     s32 sp1C = obj_has_model(MODEL_HMC_METAL_DOOR);
     if (o->oTimer == 0) {
         PlaySound2(D_8032F328[sp1C]);
-        gTimeStopState |= TIME_STOP_MARIO_OPENED_DOOR;
+        //gTimeStopState |= TIME_STOP_MARIO_OPENED_DOOR;
     }
     if (o->oTimer == 70) {
         PlaySound2(D_8032F330[sp1C]);

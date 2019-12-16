@@ -1163,7 +1163,7 @@ void bhv_bowser_init(void) {
     o->oBowserUnk1B2 = D_8032F690[level];
     o->oHealth = D_8032F694[level];
     func_802A11B4(o, 4);
-    o->oAction = 5;
+    o->oAction = 0;         //start action
     o->oBowserUnk1AE = 0;
     o->oBowserEyesShut = 0;
 }
@@ -1326,7 +1326,8 @@ void ActionFallingBowserPlatform2(void) {
     if (o->oTimer == 0 || o->oTimer == 22)
         PlaySound2(SOUND_GENERAL_BOWSER_PLATFORM_2);
     if (o->oTimer < 22) {
-        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT);
+        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT, gMarioStates[0].thisPlayerCamera);
+        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT, gMarioStates[1].thisPlayerCamera);
         o->oVelY = 8.0f;
         o->oGravity = 0.0f;
     } else

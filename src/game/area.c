@@ -357,15 +357,15 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     gWarpTransDelay = delay; // Number of frames to delay playing the transition.
     play_transition(transType, time, red, green, blue);
 }
-
+//try camera too
 void render_game(void) {
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         struct GraphNodeRoot *manip;
         manip = gCurrentArea->unk04;
         // get_object_list_from_behavior(bhvActSelector);
         // count_objects_with_behavior(bhvActSelector);
-
-        if ((gCurrLevelNum != LEVEL_MIN) && count_objects_with_behavior(bhvActSelector) == 0) {
+        inEnd = ((gMarioStates[0].action == ACT_END_PEACH_CUTSCENE) || (gMarioStates[0].action == ACT_CREDITS_CUTSCENE) || (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE));
+        if ((gCurrLevelNum != LEVEL_MIN) && (count_objects_with_behavior(bhvActSelector) == 0) && !inEnd) {
             if (horizontal) {
                 manip->width = 0x50;
             } else {
@@ -379,7 +379,7 @@ void render_game(void) {
                 } else {
                     manip->y = manip->height * 3;
                 }
-                geo_process_root(gCurrentArea->unk04, D_8032CE74, D_8032CE78, gFBSetColor);
+                geo_process_root(gCurrentArea->unk04, D_8032CE74Luigi, D_8032CE78Luigi, gFBSetColor);
                 gSPViewport(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&D_8032CF00));
             } else {
                 gCurrentArea->camera = gCurrentArea->marioCamera;

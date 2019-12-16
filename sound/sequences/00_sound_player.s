@@ -2803,6 +2803,7 @@ layer_jump .layer_C4E
 
 .ifndef VERSION_JP
   .sound_peach_dear_mario:
+  chan_transpose 0
   chan_setbank 10
   chan_setinstr 15
   chan_setlayer 0, .layer_E6F
@@ -2813,12 +2814,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_waha:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 24
   chan_setlayer 0, .layer_E7C
   chan_end
 
   .sound_luigi_waha:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 24
   chan_setlayer 0, .layer_E7C
@@ -2829,12 +2832,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_yippee:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 25
   chan_setlayer 0, .layer_E88
   chan_end
 
   .sound_luigi_yippee:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 25
   chan_setlayer 0, .layer_E88
@@ -2845,12 +2850,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_doh:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 16
   chan_setlayer 0, .layer_E94
   chan_end
 
   .sound_luigi_doh:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 16
   chan_setlayer 0, .layer_E94
@@ -2861,12 +2868,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_game_over:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 17
   chan_setlayer 0, .layer_EA0
   chan_end
 
   .sound_luigi_game_over:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 17
   chan_setlayer 0, .layer_EA0
@@ -2877,12 +2886,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_hello:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 18
   chan_setlayer 0, .layer_EAC
   chan_end
 
   .sound_luigi_hello:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 18
   chan_setlayer 0, .layer_EAC
@@ -2893,12 +2904,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_press_start_to_play:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 19
   chan_setlayer 0, .layer_EB8
   chan_end
 
   .sound_luigi_press_start_to_play:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 19
   chan_setlayer 0, .layer_EB8
@@ -2909,12 +2922,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_twirl_bounce:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 20
   chan_setlayer 0, .layer_EC5
   chan_end
 
   .sound_luigi_twirl_bounce:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 20
   chan_setlayer 0, .layer_EC5
@@ -2925,6 +2940,7 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_snoring3:
+  chan_transpose 0
   chan_setbank 8
   chan_setlayer 0, .layer_ECF
   chan_end
@@ -2953,6 +2969,7 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_so_longa_bowser:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 22
   chan_setlayer 0, .layer_EF7
@@ -2960,6 +2977,7 @@ layer_jump .layer_C4E
   chan_end
 
   .sound_luigi_so_longa_bowser:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 22
   chan_setlayer 0, .layer_EF7
@@ -2972,12 +2990,14 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_mario_ima_tired:
+  chan_transpose 0
   chan_setbank 8
   chan_setinstr 23
   chan_setlayer 0, .layer_F08
   chan_end
 
   .sound_luigi_ima_tired:
+  chan_transpose 2
   chan_setbank 8
   chan_setinstr 23
   chan_setlayer 0, .layer_F08
@@ -2988,6 +3008,7 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_peach_mario:
+  chan_transpose 0
   chan_setbank 10
   chan_setinstr 16
   chan_setlayer 0, .layer_F18

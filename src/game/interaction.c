@@ -494,7 +494,7 @@ void bounce_off_object(struct MarioState *m, struct Object *o, f32 velY) {
 
 void hit_object_from_below(struct MarioState *m, UNUSED struct Object *o) {
     m->vel[1] = 0.0f;
-    set_camera_shake(SHAKE_HIT_FROM_BELOW);
+    set_camera_shake(SHAKE_HIT_FROM_BELOW, m->thisPlayerCamera);
 }
 
 static u32 unused_determine_knockback_action(struct MarioState *m) {
@@ -630,7 +630,7 @@ void bounce_back_from_attack(struct MarioState *m, u32 interaction) {
             mario_set_forward_vel(m, -48.0f);
         }
 
-        set_camera_shake(SHAKE_ATTACK);
+        set_camera_shake(SHAKE_ATTACK, m->thisPlayerCamera);
         m->particleFlags |= 0x00040000;
     }
 
@@ -670,7 +670,7 @@ u32 take_damage_from_interact_object(struct MarioState *m) {
 
     m->hurtCounter += 4 * damage;
 
-    set_camera_shake(shake);
+    set_camera_shake(shake, m->thisPlayerCamera);
     return damage;
 }
 
@@ -711,8 +711,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < 100
-        && m->numCoins >= 100) {
+    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && (gMarioStates[0].numCoins + gMarioStates[1].numCoins) - o->oDamageOrCoinValue < 100
+        && ((gMarioStates[0].numCoins + gMarioStates[1].numCoins) >= 100)) {
         bhv_spawn_star_objects(6);
     }
 
@@ -1463,6 +1463,7 @@ u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *
             mario_stop_riding_and_holding(m);
 
             m->interactObj = o;
+            m->pole = o;
             m->usedObj = o;
             m->vel[1] = 0.0f;
             m->forwardVel = 0.0f;
@@ -1738,6 +1739,7 @@ void check_death_barrier(struct MarioState *m) {
     if (m->pos[1] < m->floorHeight + 2048.0f) {
         m->vel[1] = 5.f;
         m->pos[1] = m->floorHeight + 2050.0f;
+        sSourceWarpNodeId = 0xf1;
         if (level_trigger_warp(m, WARP_OP_WARP_FLOOR) == 20 && !(m->flags & MARIO_UNKNOWN_18)) {
             play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->soundOrigin);
         }

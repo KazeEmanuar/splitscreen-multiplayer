@@ -47,9 +47,12 @@ Gfx *Geo18_802764B0(s32 callContext, struct GraphNode *node, Mat4 *c) {
 
     if (callContext == GEO_CONTEXT_RENDER) {
         if (gPlayer1Controller->controllerData != NULL && gWarpTransition.isActive == 0) {
-            fusion.button = gPlayer2Controller->controllerData->button | gPlayer1Controller->controllerData->button;
-            fusion.stick_x = gPlayer2Controller->controllerData->stick_x + gPlayer1Controller->controllerData->stick_x;
-            fusion.stick_y = gPlayer2Controller->controllerData->stick_y + gPlayer1Controller->controllerData->stick_y;
+            fusion.button =
+                gPlayer2Controller->controllerData->button | gPlayer1Controller->controllerData->button;
+            fusion.stick_x = gPlayer2Controller->controllerData->stick_x
+                             + gPlayer1Controller->controllerData->stick_x;
+            fusion.stick_y = gPlayer2Controller->controllerData->stick_y
+                             + gPlayer1Controller->controllerData->stick_y;
             gd_copy_p1_contpad(&fusion);
             //  gd_copy_p1_contpad(gPlayer1Controller->controllerData);
             // taketurns = taketurns^1;
@@ -77,11 +80,11 @@ static void bhvToadMessage_opaque(void) {
     } else {
         if (gCurrentObject->oToadMessageRecentlyTalked == 0) {
             gCurrentObject->oInteractionSubtype = INT_SUBTYPE_NPC;
-            if (gCurrentObject->oInteractStatus & INT_STATUS_INTERACTED) {
-                gCurrentObject->oInteractStatus = 0;
-                gCurrentObject->oToadMessageState = TOAD_MESSAGE_TALKING;
-                play_toads_jingle();
-            }
+            // if (gCurrentObject->oInteractStatus & INT_STATUS_INTERACTED) {
+            gCurrentObject->oInteractStatus = 0;
+            gCurrentObject->oToadMessageState = TOAD_MESSAGE_TALKING;
+            play_toads_jingle();
+            //}
         }
     }
 }
@@ -228,7 +231,7 @@ void bhvUnlockDoorStar_loop(void) {
             if (++gCurrentObject->oUnlockDoorStarTimer == 30) {
                 play_sound(SOUND_MENU_STAR_SOUND,
                            gCurrentObject->soundOrigin); // Play final sound
-                obj_hide();                                            // Hide the object
+                obj_hide();                              // Hide the object
                 gCurrentObject->oUnlockDoorStarTimer = 0;
                 gCurrentObject
                     ->oUnlockDoorStarState++; // Sets state to UNLOCK_DOOR_STAR_SPAWNING_PARTICLES
@@ -253,9 +256,8 @@ void bhvUnlockDoorStar_loop(void) {
     // Checks if the angle has cycled back to 0.
     // This means that the code will execute when the star completes a full revolution.
     if (prevYaw > (s16) gCurrentObject->oMoveAngleYaw) {
-        play_sound(
-            SOUND_GENERAL_SHORT_STAR,
-            gCurrentObject->soundOrigin); // Play a sound every time the star spins once
+        play_sound(SOUND_GENERAL_SHORT_STAR,
+                   gCurrentObject->soundOrigin); // Play a sound every time the star spins once
     }
 }
 
@@ -312,7 +314,7 @@ s32 geo_switch_mario_stand_run(s32 callContext, struct GraphNode *node, UNUSED M
         }
         sp0 = &gBodyStates[obj->oAnimState];
         // assign result. 0 if moving, 1 if stationary.
-        switchCase->selectedCase = ((sp0->action & ACT_FLAG_STATIONARY) == FALSE);
+        switchCase->selectedCase = 0;
     }
     return 0;
 }
@@ -565,13 +567,12 @@ Gfx *geo_switch_mario_hand_grab_pos(s32 callContext, struct GraphNode *b, Mat4 *
 }
 
 Gfx *geo_render_mirror_mario(s32 callContext, struct GraphNode *node, UNUSED Mat4 *c) {
+    struct GraphNodeGenerated *sp2C = (struct GraphNodeGenerated *) node;
+    s32 sp28 = (sp2C->parameter >> 8) & 0xFF;
+    s32 id = sp2C->parameter & 0xFF;
     f32 sp34;
     struct Object *sp30;
-    int i;
-
-    for (i = 0; i < activePlayers; i++) {
-        sp30 = gMarioStates[i].marioObj;
-
+    if (!id) {
         switch (callContext) {
             case GEO_CONTEXT_CREATE:
                 init_graph_node_object(NULL, &D_80339FE0, NULL, gVec3fZero, gVec3sZero, gVec3fOne);

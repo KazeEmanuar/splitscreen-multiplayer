@@ -81,13 +81,13 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
         if (m->vel[1] < -55.0f) {
             if (fallHeight > 3000.0f) {
                 m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24;
-                set_camera_shake(SHAKE_FALL_DAMAGE);
+                set_camera_shake(SHAKE_FALL_DAMAGE, m->thisPlayerCamera);
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->soundOrigin);
                 return drop_and_set_mario_action(m, hardFallAction, 4);
             } else if (fallHeight > damageHeight && !mario_floor_is_slippery(m)) {
                 m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 8 : 12;
                 m->squishTimer = 30;
-                set_camera_shake(SHAKE_FALL_DAMAGE);
+                set_camera_shake(SHAKE_FALL_DAMAGE, m->thisPlayerCamera);
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->soundOrigin);
             }
         }
@@ -924,7 +924,7 @@ s32 act_ground_pound(struct MarioState *m) {
                     set_mario_action(m, ACT_GROUND_POUND_LAND, 0);
                 }
             }
-            set_camera_shake(SHAKE_GROUND_POUND);
+            set_camera_shake(SHAKE_GROUND_POUND, m->thisPlayerCamera);
         } else if (stepResult == AIR_STEP_HIT_WALL) {
             mario_set_forward_vel(m, -16.0f);
             if (m->vel[1] > 0.0f) {
@@ -1497,7 +1497,8 @@ s32 act_lava_boost(struct MarioState *m) {
     }
 
     if (m->health < 0x100) {
-        level_trigger_warp(m, WARP_OP_DEATH);
+        sSourceWarpNodeId = 0xf1;
+        level_trigger_warp(m, WARP_OP_WARP_FLOOR);
     }
 
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;

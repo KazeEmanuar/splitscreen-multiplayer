@@ -189,9 +189,10 @@ s32 geo_switch_area(s32 run, struct GraphNode *node) {
                        gMarioStates[gCurrLevelCamera->cameraID].marioObj->oPosZ, &sp20);
 
             if (sp20) {
-                gMarioCurrentRoom[gCurrLevelCamera->cameraID] = sp20->room;
-                sp26 = sp20->room - 1;
-                print_debug_top_down_objectinfo("areainfo %d", sp20->room);
+                if (sp20->object == NULL) {
+                    gMarioCurrentRoom[gCurrLevelCamera->cameraID] = sp20->room;
+                }
+                sp26 = gMarioCurrentRoom[gCurrLevelCamera->cameraID] - 1;
 
                 if (sp26 >= 0) {
                     switchCase->selectedCase = sp26;
@@ -1135,10 +1136,6 @@ void obj_get_dropped(void) {
 
 void obj_set_model(s32 a0) {
     o->header.gfx.sharedChild = gLoadedGraphNodes[a0];
-}
-
-void mario_set_flag(s32 flag) {
-    gMarioStates[0].flags |= flag;
 }
 
 s32 obj_clear_interact_status_flag(s32 flag) {
@@ -2445,9 +2442,11 @@ void obj_enable_rendering_if_mario_in_room(void) {
     if (o->oRoom != -1 && gMarioCurrentRoom[0] != 0 && gMarioCurrentRoom[1] != 0) {
         if (gMarioCurrentRoom[0] == o->oRoom || gMarioCurrentRoom[1] == o->oRoom) {
             marioInRoom = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom[0]][0] == o->oRoom || gDoorAdjacentRooms[gMarioCurrentRoom[1]][0] == o->oRoom) {
+        } else if (gDoorAdjacentRooms[gMarioCurrentRoom[0]][0] == o->oRoom
+                   || gDoorAdjacentRooms[gMarioCurrentRoom[1]][0] == o->oRoom) {
             marioInRoom = TRUE;
-        } else if (gDoorAdjacentRooms[gMarioCurrentRoom[0]][1] == o->oRoom || gDoorAdjacentRooms[gMarioCurrentRoom[1]][1] == o->oRoom) {
+        } else if (gDoorAdjacentRooms[gMarioCurrentRoom[0]][1] == o->oRoom
+                   || gDoorAdjacentRooms[gMarioCurrentRoom[1]][1] == o->oRoom) {
             marioInRoom = TRUE;
         } else {
             marioInRoom = FALSE;
@@ -2600,82 +2599,7 @@ static void obj_end_dialog(s32 dialogFlags, s32 dialogResult) {
 }
 
 s32 obj_update_dialog(s32 actionArg, s32 dialogFlags, s32 dialogID, UNUSED s32 unused) {
-    s32 dialogResponse = 0;
-    UNUSED s32 doneTurning = TRUE;
-    struct MarioState *m;
-    m = gMarioObject->collisionData;
-
-    switch (o->oDialogState) {
-#ifdef VERSION_JP
-        case DIALOG_UNK1_ENABLE_TIME_STOP:
-            //! We enable time stop even if mario is not ready to speak. This
-            //  allows us to move during time stop as long as mario never enters
-            //  an action that can be interrupted with text.
-            if (gMarioState->health >= 0x100) {
-                gTimeStopState |= TIME_STOP_ENABLED;
-                o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
-                o->oDialogState++;
-            }
-            break;
-#else
-        case DIALOG_UNK1_ENABLE_TIME_STOP:
-            // Patched :(
-            // Wait for mario to be ready to speak, and then enable time stop
-            if (mario_ready_to_speak(m) || gMarioState->action == ACT_READING_NPC_DIALOG) {
-                gTimeStopState |= TIME_STOP_ENABLED;
-                o->activeFlags |= ACTIVE_FLAG_INITIATED_TIME_STOP;
-                o->oDialogState++;
-            } else {
-                break;
-            }
-            // Fall through so that mario's action is interrupted immediately
-            // after time is stopped
-#endif
-
-        case DIALOG_UNK1_INTERRUPT_MARIO_ACTION:
-            if (set_mario_npc_dialog(actionArg) == 2) {
-                o->oDialogState++;
-            }
-            break;
-
-        case DIALOG_UNK1_BEGIN_DIALOG:
-            if (dialogFlags & DIALOG_UNK1_FLAG_RESPONSE) {
-                create_dialog_box_with_response(dialogID);
-            } else if (dialogFlags & DIALOG_UNK1_FLAG_DEFAULT) {
-                create_dialog_box(dialogID);
-            }
-            o->oDialogState++;
-            break;
-
-        case DIALOG_UNK1_AWAIT_DIALOG:
-            if (dialogFlags & DIALOG_UNK1_FLAG_RESPONSE) {
-                if (gDialogResponse != 0) {
-                    obj_end_dialog(dialogFlags, gDialogResponse);
-                }
-            } else if (dialogFlags & DIALOG_UNK1_FLAG_DEFAULT) {
-                if (get_dialog_id() == -1) {
-                    obj_end_dialog(dialogFlags, 3);
-                }
-            } else {
-                obj_end_dialog(dialogFlags, 3);
-            }
-            break;
-
-        case DIALOG_UNK1_DISABLE_TIME_STOP:
-            if (gMarioState->action != ACT_READING_NPC_DIALOG || (dialogFlags & DIALOG_UNK1_FLAG_4)) {
-                gTimeStopState &= ~TIME_STOP_ENABLED;
-                o->activeFlags &= ~ACTIVE_FLAG_INITIATED_TIME_STOP;
-                dialogResponse = o->oDialogResponse;
-                o->oDialogState = DIALOG_UNK1_ENABLE_TIME_STOP;
-            }
-            break;
-
-        default:
-            o->oDialogState = DIALOG_UNK1_ENABLE_TIME_STOP;
-            break;
-    }
-
-    return dialogResponse;
+    return TRUE;
 }
 
 s32 obj_update_dialog_with_cutscene(s32 actionArg, s32 dialogFlags, s32 cutsceneTable, s32 dialogID) {
