@@ -113,7 +113,7 @@ void haunted_chair_act_1(void) {
                 o->oMoveAngleYaw = o->oAngleToMario;
                 obj_compute_vel_from_move_pitch(50.0f);
             } else if (o->oHauntedChairUnkF4 > 20) {
-                if (gGlobalTimer % 4 == 0) {
+                if (gGlobalTimer % 8 == 0) {
                     PlaySound2(SOUND_GENERAL_SWISH_AIR_2);
                 }
                 o->oFaceAngleYaw += 0x2710;

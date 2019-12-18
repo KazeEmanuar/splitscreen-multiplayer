@@ -81,7 +81,7 @@ s32 random_flower_offset() {
 void envfx_update_flower(Vec3s centerPos) {
     s32 i;
     struct FloorGeometry *floorGeo; // unused
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
 
     s16 centerX = centerPos[0];
     UNUSED s16 centerY = centerPos[1];
@@ -160,7 +160,7 @@ void envfx_set_lava_bubble_position(s32 index, Vec3s centerPos) {
  */
 void envfx_update_lava(Vec3s centerPos) {
     s32 i;
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
     s8 chance;
     UNUSED s16 centerX, centerY, centerZ;
 

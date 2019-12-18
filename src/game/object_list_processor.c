@@ -343,7 +343,7 @@ void bhv_mario_update(void) {
         z = gMarioStates[l].pos[2] - gMarioStates[l ^ 1].pos[2];
 
         if ((sqrtf(x * x + z * z) < 80.f) && (y > 50.f) && (y < 150.f)
-            && gMarioStates[l].vel[1] < 0.f) {
+            && (gMarioStates[l].vel[1] < 0.f) && gMarioStates[l].action != ACT_INTRO_CUTSCENE) {
             if (gMarioStates[l ^ 1].marioObj->header.gfx.unk38.animID == MARIO_ANIM_CROUCHING) {
                 bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
                 gMarioStates[l].vel[1] = 40.f;

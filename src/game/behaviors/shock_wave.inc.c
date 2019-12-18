@@ -7,7 +7,7 @@ void bhv_bowser_shock_wave_loop(void) {
     s16 sp1E = 70;
     o->oBowserShockWaveUnkF4 = o->oTimer * 10;
     obj_scale(o->oBowserShockWaveUnkF4);
-    if (gGlobalTimer % 3)
+    if (gGlobalTimer % 6)
         o->oOpacity -= 1;
     if (o->oTimer > sp1E)
         o->oOpacity -= 5;

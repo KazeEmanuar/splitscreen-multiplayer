@@ -132,6 +132,8 @@ struct MarioState *gLuigiState = &gMarioStates[1];
 
 u8 *luigiData = NULL;
 u8 unused1[4] = { 0 };
+OSTime oldTime = 0;
+OSTime deltaTime = 0;
 
 s8 D_8032C9E0 = 0;
 
@@ -161,6 +163,7 @@ struct HudDisplay gHudDisplay;
 s8 gShouldNotPlayCastleMusic;
 
 u8 luigiCamFirst = 0;
+u8 gameLagged = 0;
 int inEnd;
 
 u8 inStarSelect = 0;
@@ -949,7 +952,7 @@ void update_hud_values(void) {
         gHudDisplay.stars = gMarioStates[0].numStars;
 
         if (gHudDisplay.coins < gMarioStates[0].numCoins + gMarioStates[1].numCoins) {
-            if (gGlobalTimer & 0x00000001) {
+            if (gGlobalTimer & 0x00000002) {
                 u32 coinSound;
                 if (gMarioState->action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER)) {
                     coinSound = SOUND_GENERAL_COIN_WATER;
@@ -1004,24 +1007,33 @@ void basic_update(UNUSED s16 *arg) {
             gCurrentArea->luigiCamera->controller = (gMarioStates[1].controller);
             gCurrentArea->luigiCamera->cameraID = 1;
             sMarioStatusForCamera = &gPlayerStatusForCamera[1];
+            // if (gMarioStates[1].controller->buttonDown & L_TRIG) {
             update_camera(gCurrentArea->luigiCamera);
+            //}
         } else {
             gCurrentArea->marioCamera->controller = (gMarioStates[0].controller);
             gCurrentArea->marioCamera->cameraID = 0;
             sMarioStatusForCamera = &gPlayerStatusForCamera[0];
+            // if (gMarioStates[0].controller->buttonDown & L_TRIG) {
             update_camera(gCurrentArea->marioCamera);
+            //}
         }
     }
 }
 
 s32 play_mode_normal(void) {
+    OSTime newTime = osGetTime();
 
     func_8024A02C();
 
     check_instant_warp(gLuigiState);
     check_instant_warp(gMarioState);
 
-    if (!luigiCamFirst) {
+    //might cause infinite loop in DDD, if it does, cap deltatime on CPU lag
+    deltaTime += newTime - oldTime;
+    oldTime = newTime;
+    while (deltaTime>1562744){
+        deltaTime-= 1562744;
         if (sTimerRunning && gHudDisplay.timer < 17999) {
             gHudDisplay.timer += 1;
         }
@@ -1034,12 +1046,16 @@ s32 play_mode_normal(void) {
             gCurrentArea->luigiCamera->controller = (gMarioStates[1].controller);
             gCurrentArea->luigiCamera->cameraID = 1;
             sMarioStatusForCamera = &gPlayerStatusForCamera[1];
+            // if (gMarioStates[1].controller->buttonDown & L_TRIG) {
             update_camera(gCurrentArea->luigiCamera);
+            //}
         } else {
             gCurrentArea->marioCamera->controller = (gMarioStates[0].controller);
             gCurrentArea->marioCamera->cameraID = 0;
             sMarioStatusForCamera = &gPlayerStatusForCamera[0];
+            // if (gMarioStates[0].controller->buttonDown & L_TRIG) {
             update_camera(gCurrentArea->marioCamera);
+            //}
         }
     }
 
@@ -1261,7 +1277,7 @@ s32 init_level(void) {
                 set_mario_action(gMarioState, ACT_IDLE, 0);
             } else if (gDebugLevelSelect == 0) {
                 if (gMarioStates[0].action != ACT_UNINITIALIZED) {
-                    if (TRUE) {//save_file_exists(gCurrSaveFileNum - 1)
+                    if (TRUE) { // save_file_exists(gCurrSaveFileNum - 1)
                         set_mario_action(gMarioState, ACT_IDLE, 0);
                         set_mario_action(gLuigiState, ACT_IDLE, 0);
                     } else {
@@ -1374,7 +1390,7 @@ s32 lvl_init_from_save_file(UNUSED s16 arg0, s32 levelNum) {
 
             i += 4;
         }
-        storeWord(luigiData+0x40030, 0x3e926666);
+        storeWord(luigiData + 0x40030, 0x3e926666);
     }
     return levelNum;
 }

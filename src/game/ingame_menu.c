@@ -1549,7 +1549,7 @@ void render_dialog_triangle_choice(void) {
 #endif
 
 void render_dialog_string_color(s8 linesPerBox) {
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
 
     if (timer & 0x08) {
         return;
@@ -2141,7 +2141,7 @@ void shade_screen(void) {
 }
 
 void print_animated_red_coin(s16 x, s16 y) {
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
 
     create_dl_translation_matrix(MENU_MTX_PUSH, x, y, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.2f, 0.2f, 1.0f);

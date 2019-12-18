@@ -835,7 +835,7 @@ struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {
         }
     }
 
-    while (sScriptStatus == SCRIPT_RUNNING) { // execute every other run?
+    while (sScriptStatus == SCRIPT_RUNNING) {
         LevelScriptJumpTable[sCurrentCmd->type]();
     }
 

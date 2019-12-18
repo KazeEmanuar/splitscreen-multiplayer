@@ -275,7 +275,7 @@ void bhv_small_penguin_loop(void) {
             if (obj_has_behavior(bhvPenguinBaby))
                 set_object_behavior(o, bhvSmallPenguin);
             copy_object_pos(o, gMarioObject);
-            if (gGlobalTimer % 30 == 0)
+            if (gGlobalTimer % 60 == 0)
 #ifndef VERSION_JP
                 play_sound(SOUND_OBJ2_BABY_PENGUIN_YELL, gMarioObject->soundOrigin);
 #else
@@ -305,7 +305,7 @@ s32 geo_switch_tuxie_mother_eyes(s32 run, struct GraphNode *node, UNUSED Mat4 *m
         switchCase->selectedCase = 0;
 
         // timer logic for blinking. uses cases 0-2.
-        timer = gGlobalTimer % 50;
+        timer = gGlobalTimer % 100;
         if (timer < 43)
             switchCase->selectedCase = 0;
         else if (timer < 45)

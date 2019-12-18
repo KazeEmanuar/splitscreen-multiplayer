@@ -116,7 +116,7 @@ void bhv_snufit_loop(void) {
         }
 
         o->oPosX = o->oHomeX + 100.0f * coss(o->oSnufitUnk100);
-        o->oPosY = o->oHomeY + 8.0f * coss(4000 * gGlobalTimer);
+        o->oPosY = o->oHomeY + 8.0f * coss(2000 * gGlobalTimer);
         o->oPosZ = o->oHomeZ + 100.0f * sins(o->oSnufitUnk100);
 
         o->oSnufitUnk1AE = -0x20;

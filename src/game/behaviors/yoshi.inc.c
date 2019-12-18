@@ -130,7 +130,7 @@ void yoshi_finish_jumping_and_despawn_loop(void) {
 }
 
 void yoshi_give_present_loop(void) {
-    s32 sp1C = gGlobalTimer;
+    s32 sp1C = gGlobalTimer/2;
 
     if (gHudDisplay.lives == 100) {
         play_sound(SOUND_GENERAL_COLLECT_1UP, gDefaultSoundArgs);

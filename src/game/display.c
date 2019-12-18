@@ -81,7 +81,7 @@ void clear_z_buffer(void) { // RISKY
     gDPSetFillColor(gDisplayListHead++,
                     GPACK_RGBA5551(255, 255, 240, 0) << 16 | GPACK_RGBA5551(255, 255, 240, 0));
 
-    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect  && !inEnd) {
+    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect && !inEnd) {
         gDPFillRectangle(gDisplayListHead++, 0, d - d / (luigiCamFirst + 1), SCREEN_WIDTH - 1,
                          d / 2 * (luigiCamFirst + 1) - 1);
     } else {
@@ -95,10 +95,10 @@ void display_frame_buffer(void) {
     int c = BORDER_HEIGHT;
     int d = SCREEN_HEIGHT;
     int e = 0;
-    if (frameBufferIndex == 0) {
+    if (sCurrFBNum == 0) { // RED asked me to change this KAZENOTE
         e = 2;
     } else {
-        e = frameBufferIndex - 1;
+        e = sCurrFBNum - 1;
     }
     gDPPipeSync(gDisplayListHead++);
 
@@ -110,7 +110,7 @@ void display_frame_buffer(void) {
         gDPSetColorImage(gDisplayListHead++, G_IM_FMT_RGBA, 2, SCREEN_WIDTH, gFrameBuffers[e]);
     }
 
-    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect  && !inEnd) { // RISKY
+    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect && !inEnd) { // RISKY
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, d - d / (luigiCamFirst + 1),
                       SCREEN_WIDTH, d / 2 * (luigiCamFirst + 1));
     } else {
@@ -303,12 +303,12 @@ void display_and_vsync(void) {
     }
     send_display_list(&gGfxPool->spTask);
     profiler_log_thread5_time(AFTER_DISPLAY_LISTS);
-    //osRecvMesg(&gGameVblankQueue, &D_80339BEC, OS_MESG_BLOCK);
-    //if ((gCurrLevelNum == LEVEL_MIN) && !inStarSelect && !inEnd) {
+    // osRecvMesg(&gGameVblankQueue, &D_80339BEC, OS_MESG_BLOCK);
+    if ((gCurrLevelNum == LEVEL_MIN) && !inStarSelect && !inEnd) {
         osRecvMesg(&gGameVblankQueue, &D_80339BEC, OS_MESG_BLOCK);
-    //}
+    }
 
-    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect  && !inEnd) {
+    if ((gCurrLevelNum != LEVEL_MIN) && !inStarSelect && !inEnd) {
         if (!luigiCamFirst) {
             osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gFrameBuffers[sCurrFBNum]));
         }
@@ -324,7 +324,5 @@ void display_and_vsync(void) {
     if (++frameBufferIndex == 3) {
         frameBufferIndex = 0;
     }
-    if (!luigiCamFirst) {
-        gGlobalTimer++;
-    }
+    gGlobalTimer++;
 }

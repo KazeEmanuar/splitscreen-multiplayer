@@ -1655,7 +1655,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
         //! (Pause buffered hitstun) Since the global timer increments while paused,
         //  this can be paused through to give continual invisibility. This leads to
         //  no interaction with objects.
-        if (gGlobalTimer & 1) { // ANNOTATION
+        if (gGlobalTimer & 2) { // ANNOTATION
             m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
         }
     }

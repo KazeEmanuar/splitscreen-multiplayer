@@ -73,6 +73,16 @@ glabel cop0_get_badvaddr
     jr   $ra
     mfc0 $v0, $8 # COP0_BADVADDR
 
+glabel cop1_get_fpcsr
+    cfc1 $v0, $31 #COP1_FPCSR
+    nop
+    nop
+    nop
+    nop
+    nop
+    jr $ra
+    nop
+
 # If the error code field of cop0's cause register is non-zero,
 # draw crash details to the screen and hang
 #

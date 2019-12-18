@@ -98,7 +98,7 @@ s32 envfx_init_snow(s32 mode) {
  * Blizzard snows starts at the maximum amount and doesn't change.
  */
 void envfx_update_snowflake_count(s32 mode, Vec3s marioPos) {
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
     f32 waterLevel;
     switch (mode) {
         case ENVFX_SNOW_NORMAL:

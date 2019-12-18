@@ -28,7 +28,7 @@ void osInitialize(void) {
     UNUSED u32 sp2c;
     D_80365CD0 = TRUE;
     __osSetSR(__osGetSR() | 0x20000000);
-    __osSetFpcCsr(0x01000800);
+    __osSetFpcCsr(0x01000800);  //remove 1 bit
     while (__osSiRawReadIo(PIF_ADDR_START, &sp34)) {
         ;
     }

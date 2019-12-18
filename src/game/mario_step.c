@@ -205,7 +205,7 @@ u32 mario_update_windy_ground(struct MarioState *m) {
 
             pushSpeed *= coss(pushDYaw);
         } else {
-            pushSpeed = 3.2f + (gGlobalTimer % 4);
+            pushSpeed = 3.2f + (gGlobalTimer % 8);
         }
 
         m->vel[0] += pushSpeed * sins(pushAngle);

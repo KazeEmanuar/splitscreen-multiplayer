@@ -7,6 +7,7 @@
 
 extern const u8 activePlayers;
 extern u8 luigiCamFirst;
+extern u8 gameLagged;
 extern int inEnd;
 extern u8 inStarSelect;
 extern const u8 horizontal;

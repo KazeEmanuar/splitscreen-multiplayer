@@ -364,7 +364,7 @@ void render_game(void) {
         manip = gCurrentArea->unk04;
         // get_object_list_from_behavior(bhvActSelector);
         // count_objects_with_behavior(bhvActSelector);
-        inEnd = ((gMarioStates[0].action == ACT_END_PEACH_CUTSCENE) || (gMarioStates[0].action == ACT_CREDITS_CUTSCENE) || (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE));
+        inEnd = ((gMarioStates[0].action == ACT_END_PEACH_CUTSCENE) || (gMarioStates[0].action == ACT_CREDITS_CUTSCENE) || (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE)|| (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE));
         if ((gCurrLevelNum != LEVEL_MIN) && (count_objects_with_behavior(bhvActSelector) == 0) && !inEnd) {
             if (horizontal) {
                 manip->width = 0x50;

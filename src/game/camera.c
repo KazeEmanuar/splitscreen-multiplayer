@@ -150,7 +150,6 @@ s32 (*TableCameraTransitions[])(struct LevelCamera *, Vec3f,
 
 extern u32 gPrevLevel;
 
-
 void set_camera_shake(s16 shake, struct LevelCamera *c) {
 
     switch (shake) {
@@ -2249,8 +2248,6 @@ void update_camera(struct LevelCamera *c) {
     gMarioStates[c->cameraID].thisPlayerCamera = c;
     gCurrLevelCamera = c;
     gCameraStatus[c->cameraID].cameraID = c->cameraID;
-    // D_8033B230[0].fieldOfView = 35.0f;     //  KAZENOTE increase this a slight bit past 45 at the end
-    // maybe?
     update_camera_status(c);
     if (c->cutscene == 0) {
         if (select_or_activate_mario_cam(0, c) == CAM_ANGLE_LAKITU_MARIO) {
@@ -2281,9 +2278,7 @@ void update_camera(struct LevelCamera *c) {
 
     find_mario_relative_geometry(&sGeometryForMario[c->cameraID], c);
     gCheckingSurfaceCollisionsForCamera = 1;
-    vec3f_copy(
-        c->pos,
-        gCameraStatus[c->cameraID].camFocAndPosCurrAndGoal[3]);
+    vec3f_copy(c->pos, gCameraStatus[c->cameraID].camFocAndPosCurrAndGoal[3]);
     vec3f_copy(c->focus, gCameraStatus[c->cameraID].camFocAndPosCurrAndGoal[2]);
 
     c->trueYaw = gCameraStatus[c->cameraID].trueYaw;
@@ -2292,7 +2287,6 @@ void update_camera(struct LevelCamera *c) {
     c->defPreset = gCameraStatus[c->cameraID].modeDefault;
 
     level_specific_camera_update(c);
-    dummy_802877EC(c);
     gCButtonsPressed[c->cameraID] = find_c_buttons_pressed(
         gCButtonsPressed[c->cameraID], c->controller->buttonPressed, c->controller->buttonDown);
     if (c->cutscene != 0) {
@@ -2308,10 +2302,11 @@ void update_camera(struct LevelCamera *c) {
             }
         }
     }
-    if (c->cutscene == 0) { //the crash happens AS SOON AS THIS IS TRUE
+    if (c->cutscene == 0) { // the crash happens AS SOON AS THIS IS TRUE
         D_8032CFD4[c->cameraID] = 0x400;
-        if (TRUE) { //gMarioStates[c->cameraID].action == ACT_BUBBLED
-            update_platform_level_camera(c);    //passing c crashes? stub doesnt, but empty update does
+        if (gMarioStates[c->cameraID].action
+            == ACT_BUBBLED) {                // gMarioStates[c->cameraID].action == ACT_BUBBLED
+            update_platform_level_camera(c); // passing c crashes? stub doesnt, but empty update does
         } else if (gCameraModeFlags[c->cameraID] & CAM_MODE_MARIO_ACTIVE) {
             switch (c->currPreset) {
                 case CAMERA_PRESET_BEHIND_MARIO:
@@ -2334,8 +2329,8 @@ void update_camera(struct LevelCamera *c) {
                     camera_mario_zoom_distance(c);
             }
         } else {
-            switch (
-                c->currPreset) { /*KAZEFIX set these all to update_platform_level_camera for paracam */
+            switch (c->currPreset) { /*KAZEFIX set these all to update_platform_level_camera for
+                                        paracam */
                 case CAMERA_PRESET_BEHIND_MARIO:
                     update_behind_mario_camera(c);
                     break;
@@ -2394,7 +2389,6 @@ void update_camera(struct LevelCamera *c) {
         }
     }
     set_camera_cutscene_table(c, return_cutscene_table(c));
-    dummy_802877D8(c);
     gCheckingSurfaceCollisionsForCamera = 0;
     if (gCurrLevelNum != LEVEL_CASTLE) {
         if ((c->cutscene == 0 && (c->controller->buttonDown & R_TRIG)
@@ -2424,7 +2418,9 @@ void update_camera(struct LevelCamera *c) {
             play_sound_button_change_blocked();
         }
     }
+    // if (!luigiCamFirst || (gMarioStates[0].controller->buttonDown & L_TRIG)) {
     func_80285E70(c); // actually positions the camera
+    //}
     gCameraStatus[c->cameraID].lastFrameAction = (&gPlayerStatusForCamera[c->cameraID])->action;
 }
 
@@ -2693,9 +2689,9 @@ void func_802876D0(struct GraphNodeCamera *a) { // this is fine i guess
     UNUSED u8 unused[8];
     UNUSED struct LevelCamera *c = a->config.levelCamera;
 
-    a->rollScreen = gCameraStatus[gCurrentArea->camera->cameraID].roll;
-    vec3f_copy(a->from, gCameraStatus[gCurrentArea->camera->cameraID].pos);
-    vec3f_copy(a->to, gCameraStatus[gCurrentArea->camera->cameraID].focus);
+    a->rollScreen = gCameraStatus[gCurrLevelCamera->cameraID].roll;
+    vec3f_copy(a->from, gCameraStatus[gCurrLevelCamera->cameraID].pos);
+    vec3f_copy(a->to, gCameraStatus[gCurrLevelCamera->cameraID].focus);
     func_80287404(a);
 }
 
@@ -2712,12 +2708,6 @@ s32 geo_camera_preset_and_pos(s32 a, struct GraphNodeCamera *b, struct AllocOnly
             break;
     }
     return 0;
-}
-
-void dummy_802877D8(UNUSED struct LevelCamera *c) {
-}
-
-void dummy_802877EC(UNUSED struct LevelCamera *c) {
 }
 
 void vec3f_sub(Vec3f dst, Vec3f src) {
@@ -2782,7 +2772,6 @@ void evaluate_cubic_spline(f32 u, Vec3f Q, Vec3f a0, Vec3f a1, Vec3f a2, Vec3f a
     x = B[0] * a0[0] + B[1] * a1[0] + B[2] * a2[0] + B[3] * a3[0];
     y = B[0] * a0[1] + B[1] * a1[1] + B[2] * a2[1] + B[3] * a3[1];
     z = B[0] * a0[2] + B[1] * a1[2] + B[2] * a2[2] + B[3] * a3[2];
-
 }
 
 s32 func_80287CFC(Vec3f a, struct CinematicCameraTable b[], s16 *c, f32 *d) {
@@ -5592,7 +5581,9 @@ s16 cutscene_object(u8 cutsceneTable, struct Object *o) {
     int i;
 
     for (i = 0; i < activePlayers; i++) {
-        if ((gMarioStates[i].thisPlayerCamera->cutscene == 0) && (sTempCutsceneNumber[i] == 0)) {       //luigi fucks this up when he walks through a door while this is happening
+        if ((gMarioStates[i].thisPlayerCamera->cutscene == 0)
+            && (sTempCutsceneNumber[i]
+                == 0)) { // luigi fucks this up when he walks through a door while this is happening
             if (gCutsceneNumber[i] != cutsceneTable) {
                 func_8028F800(cutsceneTable, o, gMarioStates[i].thisPlayerCamera);
                 sp1E = 1;

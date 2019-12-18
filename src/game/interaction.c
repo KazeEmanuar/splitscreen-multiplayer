@@ -308,7 +308,7 @@ void mario_stop_riding_and_holding(struct MarioState *m) {
 
     if (m->action == ACT_RIDING_HOOT) {
         m->usedObj->oInteractStatus = 0;
-        m->usedObj->oHootMarioReleaseTime = gGlobalTimer;
+        m->usedObj->oHootMarioReleaseTime = gGlobalTimer/2;
     }
 }
 
@@ -1491,7 +1491,7 @@ u32 interact_hoot(struct MarioState *m, UNUSED u32 interactType, struct Object *
     //! Can pause to advance the global timer without falling too far, allowing
     // you to regrab after letting go.
     if (actionId >= 0x080 && actionId < 0x098
-        && (gGlobalTimer - m->usedObj->oHootMarioReleaseTime > 30)) {
+        && (gGlobalTimer/2 - m->usedObj->oHootMarioReleaseTime > 30)) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_HOOT_GRABBED_BY_MARIO;
         m->interactObj = o;

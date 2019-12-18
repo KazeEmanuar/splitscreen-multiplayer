@@ -398,8 +398,6 @@ extern void update_camera(struct LevelCamera *);
 extern void reset_camera(struct LevelCamera *);
 extern void init_camera(struct LevelCamera *);
 extern void select_mario_cam_mode(void);
-extern void dummy_802877D8(struct LevelCamera *);
-extern void dummy_802877EC(struct LevelCamera *);
 extern void vec3f_sub(Vec3f, Vec3f);
 extern void object_pos_to_vec3f(Vec3f, struct Object *);
 extern void vec3f_to_object_pos(struct Object *, Vec3f); // static (ASM)

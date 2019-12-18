@@ -241,7 +241,7 @@ static void chain_chomp_sub_act_lunge(void) {
         }
 
         o->oChainChompMaxDistBetweenChainParts = o->oChainChompUnk104;
-        if (gGlobalTimer % 2 != 0) {
+        if (gGlobalTimer % 4 != 0) {
             o->oChainChompMaxDistBetweenChainParts = -o->oChainChompUnk104;
         }
     }

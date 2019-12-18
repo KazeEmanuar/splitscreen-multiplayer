@@ -42,7 +42,7 @@ void bhv_white_wind_particle_loop(void) {
 }
 
 void func_802C76E0(s32 a0, f32 a1, f32 a2, f32 a3, f32 a4) {
-    if ((gGlobalTimer & 1) != 0) {
+    if ((gGlobalTimer & 2) != 0) {
         spawn_object_relative_with_scale(a0, a2, a3, a4, 0.5f, o, MODEL_WHITE_PARTICLE_DL,
                                          bhvTinyWhiteWindParticle);
         spawn_object_relative_with_scale(a0, a2, a3, a4, a1, o, MODEL_NONE, bhvWindParticle);

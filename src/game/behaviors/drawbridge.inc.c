@@ -17,7 +17,7 @@ void bhv_lll_drawbridge_spawner_loop(void) {
 }
 
 void bhv_lll_drawbridge_loop(void) {
-    s32 globalTimer = gGlobalTimer;
+    s32 globalTimer = gGlobalTimer/2;
 
     switch (o->oAction) {
         case LLL_DRAWBRIDGE_ACT_LOWER:
