@@ -289,10 +289,13 @@ void bhv_mario_update(void) {
     }
     gMarioStates[l].numStars =
         save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
-    // if (gMarioStates[l].controller->buttonDown & L_TRIG){
-    // gMarioStates[l].action = ACT_END_PEACH_CUTSCENE;
-    //}
-      //  gCurrentObject->header.gfx.sharedChild = 0;
+     //   if (gMarioState->controller->buttonPressed & L_TRIG){
+      //      level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
+       // }
+    //give stars
+    //debug
+    //get_all_stars();
+    //  gCurrentObject->header.gfx.sharedChild = 0;
     gCurrentObject->oAnimState = l;
     gMarioStates[l].marioObj = gCurrentObject;
     gMarioStates[l].marioObj->collisionData = &gMarioStates[l];
@@ -342,8 +345,11 @@ void bhv_mario_update(void) {
         y = gMarioStates[l].pos[1] - gMarioStates[l ^ 1].pos[1];
         z = gMarioStates[l].pos[2] - gMarioStates[l ^ 1].pos[2];
 
-        if ((sqrtf(x * x + z * z) < 80.f) && (y > 50.f) && (y < 150.f)
-            && (gMarioStates[l].vel[1] < 0.f) && gMarioStates[l].action != ACT_INTRO_CUTSCENE) {
+        if ((sqrtf(x * x + z * z) < 80.f) && (y > 50.f) && (y < 150.f) && (gMarioStates[l].vel[1] < 0.f)
+            && (gMarioStates[l].action != ACT_INTRO_CUTSCENE)
+            && (gMarioStates[l].action != ACT_SPECIAL_DEATH_EXIT)
+            && (gMarioStates[l].action != ACT_SPECIAL_EXIT_AIRBORNE)
+            && (gMarioStates[l ^ 1].action != ACT_BUBBLED)) {
             if (gMarioStates[l ^ 1].marioObj->header.gfx.unk38.animID == MARIO_ANIM_CROUCHING) {
                 bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
                 gMarioStates[l].vel[1] = 40.f;

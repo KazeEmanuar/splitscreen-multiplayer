@@ -765,11 +765,11 @@ void ActionBowser3(void) {
 void func_802B5C78(void) {
     if (BITS){
         gSecondCameraFocus[0] = spawn_object(o, MODEL_STAR, &bhvGrandStar);
-        gSecondCameraFocus[1] = spawn_object(o, MODEL_STAR, &bhvGrandStar);
+        gSecondCameraFocus[1] = gSecondCameraFocus[0];
     }
     else {
         gSecondCameraFocus[0] = spawn_object(o, MODEL_BOWSER_KEY, &bhvBowserKey);
-        gSecondCameraFocus[1] = spawn_object(o, MODEL_BOWSER_KEY, &bhvBowserKey);
+        gSecondCameraFocus[1] = gSecondCameraFocus[0];
         PlaySound2(SOUND_GENERAL2_BOWSER_KEY);
     }
     gSecondCameraFocus[0]->oAngleVelYaw = o->oAngleVelYaw;

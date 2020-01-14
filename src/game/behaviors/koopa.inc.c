@@ -712,9 +712,6 @@ static void koopa_the_quick_act_after_race(void) {
             if (o->parentObj->oKoopaRaceEndpointRaceStatus != 0) {
                 if (o->parentObj->oKoopaRaceEndpointRaceStatus < 0) {
                     // Mario cheated
-                    o->parentObj->oKoopaRaceEndpointRaceStatus = 0;
-                    o->parentObj->oKoopaRaceEndpointUnk100 = 6;
-                } else {
                     // Mario won
                     o->parentObj->oKoopaRaceEndpointUnk100 =
                         sKoopaTheQuickProperties[o->oKoopaTheQuickRaceIndex].unk02;

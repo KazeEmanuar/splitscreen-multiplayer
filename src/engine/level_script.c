@@ -823,8 +823,7 @@ struct LevelCommand *level_script_execute(struct LevelCommand *cmd) {
         while (obj != (struct Object *) listHead) {
             if (obj->behavior == behaviorAddr) {
                 if (obj->activeFlags != 0) {
-                    if ((gMarioStates[luigiCamFirst].usedObj == obj->parentObj)
-                        && gMarioStates[luigiCamFirst].usedObj->oAction == 1) {
+                    if ((gMarioStates[luigiCamFirst].usedObj == obj->parentObj) && (gMarioStates[luigiCamFirst].usedObj->parentObj->oAction == 1)) {
                         obj->header.gfx.sharedChild = NULL;
                     } else {
                         obj->header.gfx.sharedChild = gLoadedGraphNodes[0x7f];

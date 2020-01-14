@@ -105,6 +105,7 @@ struct BullyCollisionData {
 
 extern u8 D_03009AC8[];
 
+extern u8 sJustTeleported;
 extern s16 mario_angle_to_object(struct MarioState *, struct Object *);
 extern void mario_stop_riding_object(struct MarioState *);
 extern void mario_grab_used_object(struct MarioState *);

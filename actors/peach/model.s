@@ -6555,7 +6555,7 @@ peach_seg5_animindex_501B220: # 0x0501B220
 .hword 0x0088, 0x0B2C, 0x0088, 0x0BB4
 
 peach_seg5_anim_0501B328: # 0x0501B328
-.hword 1
+.hword 2
 .hword 0
 .hword 0
 .hword 0

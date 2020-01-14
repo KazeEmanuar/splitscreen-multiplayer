@@ -12,7 +12,7 @@ glabel level_ending_entry
     load_area /*area*/ 1
     transition /*unk2*/ 0, /*unk3*/ 75, /*color*/ 0, 0, 0
     sleep /*frames*/ 120
-    call /*arg*/ 0, /*func*/ lvl_play_the_end_screen_sound
 L1:
+    call /*arg*/ 0, /*func*/ lvl_play_the_end_screen_sound
     sleep /*frames*/ 1
     jump /*target*/ L1

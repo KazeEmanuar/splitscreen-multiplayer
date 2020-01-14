@@ -853,5 +853,6 @@ extern void func_8029A7DC(struct Object *, Vec3f, s16, s16, s16, s16);
 // extern ? bhv_end_birds_2_loop(?);
 // extern ? func_8029B964(?);
 // extern ? bhv_intro_scene_loop(?);
+extern struct Struct8033B418 D_8033B418[];
 
 #endif /* _CAMERA_H */

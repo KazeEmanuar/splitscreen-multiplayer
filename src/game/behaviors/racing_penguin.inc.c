@@ -120,12 +120,7 @@ static void racing_penguin_act_show_final_text(void) {
 
             if (obj_is_mario_in_range_and_ready_to_speak(400.0f, 400.0f)) {
                 if (o->oRacingPenguinMarioWon) {
-                    if (o->oRacingPenguinMarioCheated) {
-                        o->oRacingPenguinFinalTextbox = 0x84;
-                        o->oRacingPenguinMarioWon = FALSE;
-                    } else {
-                        o->oRacingPenguinFinalTextbox = 0x38;
-                    }
+                    o->oRacingPenguinFinalTextbox = 0x38;
                 } else {
                     o->oRacingPenguinFinalTextbox = 0x25;
                 }
@@ -140,7 +135,9 @@ static void racing_penguin_act_show_final_text(void) {
             o->oForwardVel = 4.0f;
         }
     } else if (o->oRacingPenguinFinalTextbox > 0) {
-        if ((textResult = obj_update_dialog_with_cutscene(2, 1, CUTSCENE_DIALOG_1, o->oRacingPenguinFinalTextbox)) != 0) {
+        if ((textResult = obj_update_dialog_with_cutscene(2, 1, CUTSCENE_DIALOG_1,
+                                                          o->oRacingPenguinFinalTextbox))
+            != 0) {
             o->oRacingPenguinFinalTextbox = -1;
             o->oTimer = 0;
         }

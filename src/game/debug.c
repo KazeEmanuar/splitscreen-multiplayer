@@ -366,9 +366,6 @@ void try_print_debug_mario_object_info(void) {
  * stageinfo)
  */
 void try_print_debug_mario_level_info(void) {
-    if (gMarioStates[0].controller->buttonDown & 0x0020){
-    gMarioStates[0].vel[1] = 40.0f;
-    }
 
     switch (sDebugPage) {
         case DEBUG_PAGE_OBJECTINFO:

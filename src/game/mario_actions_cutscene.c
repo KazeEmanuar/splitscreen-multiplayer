@@ -70,7 +70,6 @@ static Vec4s sJumboStarKeyframes[27] = {
 
 static s32 sSparkleGenTheta = 0;
 static s32 sSparkleGenPhi = 0;
-
 // blink twice then have half-shut eyes (see end_peach_cutscene_kiss_from_peach)
 static u8 sMarioBlinkOverride[20] = {
     MARIO_EYES_HALF_CLOSED, MARIO_EYES_HALF_CLOSED, MARIO_EYES_CLOSED, MARIO_EYES_CLOSED,
@@ -251,7 +250,7 @@ s32 get_star_collection_dialog(struct MarioState *m) {
     return dialogID;
 }
 
-// save menu handler
+// actually I can just tell u the fix: just poll inputs always when the save dialog is up
 void handle_save_menu(struct MarioState *m) {
     s32 dialogID;
     // wait for the menu to show up
@@ -272,14 +271,7 @@ void handle_save_menu(struct MarioState *m) {
             disable_time_stop();
             m->faceAngle[1] += 0x8000;
             // figure out what dialog to show, if we should
-            dialogID = get_star_collection_dialog(m);
-            if (dialogID != 0) {
-                play_peachs_jingle();
-                // look up for dialog
-                set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);
-            } else {
-                set_mario_action(m, ACT_IDLE, 0);
-            }
+            set_mario_action(m, ACT_IDLE, 0);
         }
     }
 }
@@ -419,6 +411,7 @@ s32 act_disappeared(struct MarioState *m) {
     if (m->actionArg) {
         m->actionArg--;
         if ((m->actionArg & 0xFFFF) == 0) {
+            sSourceWarpNodeId = 0xf0;
             level_trigger_warp(m, m->actionArg >> 16);
         }
     }
@@ -706,8 +699,19 @@ s32 launch_mario_until_land(struct MarioState *m, s32 endAction, s32 animation, 
     s32 airStepLanded;
     mario_set_forward_vel(m, forwardVel);
     set_mario_animation(m, animation);
-    airStepLanded = (perform_air_step(m, 0) == AIR_STEP_LANDED);
+    airStepLanded = (perform_air_step(m, 0) == AIR_STEP_LANDED); // luigi lands here for some reason??
     if (airStepLanded) {
+        set_mario_action(m, endAction, 0);
+    }
+    return airStepLanded;
+}
+
+s32 launch_mario_until_land2(struct MarioState *m, s32 endAction, s32 animation, f32 forwardVel) {
+    s32 airStepLanded;
+    mario_set_forward_vel(m, forwardVel);
+    set_mario_animation(m, animation);
+    airStepLanded = (perform_air_step(m, 0) == AIR_STEP_LANDED); // luigi lands here for some reason??
+    if (airStepLanded && (m->marioObj->header.gfx.unk38.animFrame >= 0)) {
         set_mario_action(m, endAction, 0);
     }
     return airStepLanded;
@@ -1158,7 +1162,7 @@ s32 act_special_exit_airborne(struct MarioState *m) {
         return FALSE;
     }
 
-    if (launch_mario_until_land(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_SINGLE_JUMP, -24.0f)) {
+    if (launch_mario_until_land2(m, ACT_EXIT_LAND_SAVE_DIALOG, MARIO_ANIM_SINGLE_JUMP, -24.0f)) {
         // heal mario
         m->healCounter = 31;
         m->actionArg = 1;
@@ -1181,7 +1185,7 @@ s32 act_special_death_exit(struct MarioState *m) {
         return FALSE;
     }
 
-    if (launch_mario_until_land(m, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -24.0f)) {
+    if (launch_mario_until_land2(m, ACT_HARD_BACKWARD_GROUND_KB, MARIO_ANIM_BACKWARD_AIR_KB, -24.0f)) {
         m->numLives;
         m->healCounter = 31;
     }
@@ -1336,6 +1340,7 @@ s32 act_teleport_fade_out(struct MarioState *m) {
     }
 
     if (m->actionTimer++ == 20) {
+        sSourceWarpNodeId = 0xf0;
         level_trigger_warp(m, WARP_OP_TELEPORT);
     }
 
@@ -1345,6 +1350,13 @@ s32 act_teleport_fade_out(struct MarioState *m) {
 }
 
 s32 act_teleport_fade_in(struct MarioState *m) {
+    if (m->thisPlayerCamera->currPreset == CAMERA_PRESET_INSIDE_CANNON) {
+        m->statusForCamera->unk1C[1] = 2;
+        m->marioObj->header.gfx.node.flags |= 0x0001;
+        set_mario_action(m, ACT_SHOT_FROM_CANNON, 0);
+        m->fadeWarpOpacity = 0xff;
+        return;
+    }
     play_sound_if_no_flag(m, SOUND_ACTION_UNKNOWN457, MARIO_ACTION_SOUND_PLAYED);
     set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);
 
@@ -1934,7 +1946,9 @@ static void end_peach_cutscene_summon_jumbo_star(struct MarioState *m) {
         m->actionState++;
     }
     if (m->actionTimer == 90) {
-        play_cutscene_music(SEQUENCE_ARGS(0, SEQ_EVENT_CUTSCENE_ENDING));
+        if (!m->marioObj->oAnimState) {
+            play_cutscene_music(SEQUENCE_ARGS(0, SEQ_EVENT_CUTSCENE_ENDING));
+        }
     }
     if (m->actionTimer == 255) {
         advance_cutscene_step(m);
@@ -1964,7 +1978,8 @@ static void end_peach_cutscene_spawn_peach(struct MarioState *m) {
 
             sEndPeachObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_PEACH, bhvEndPeach, 0,
                                                      2428, -1300, 0, 0, 0);
-            gCutsceneFocus[m->thisPlayerCamera->cameraID] = sEndPeachObj;
+            gCutsceneFocus[0] = sEndPeachObj;
+            gCutsceneFocus[1] = sEndPeachObj;
 
             sEndRightToadObj = spawn_object_abs_with_rot(gCurrentObject, 0, MODEL_TOAD, bhvEndToad, 200,
                                                          906, -1290, 0, 0, 0);
@@ -2129,11 +2144,9 @@ static void end_peach_cutscene_dialog_2(struct MarioState *m) {
             D_8032CBE8 = 1;
             break;
 
-        case 75:
+        case 80:
             set_cutscene_message(160, 227, 3, 30);
-#ifndef VERSION_JP
             play_sound(SOUND_PEACH_THANK_YOU_MARIO, sEndPeachObj->soundOrigin);
-#endif
             break;
 
         case 130:
@@ -2150,6 +2163,7 @@ static void end_peach_cutscene_dialog_2(struct MarioState *m) {
 }
 
 static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
+    int kissduration = 80;
     sEndPeachAnimation = 10;
 
     if (m->actionTimer >= 90) {
@@ -2157,6 +2171,22 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
             m->actionTimer < 110 ? sMarioBlinkOverride[m->actionTimer - 90] : MARIO_EYES_HALF_CLOSED;
     }
 
+    // rotate peach towards mario and luigi respectively
+    // mirror these cases 0x88 delayed for luigi
+    // sEndPeachObj
+    if (m->actionTimer > 10 && m->actionTimer < 55) {
+        // move peach to mario
+        sEndPeachObj->oPosX += 0.5f;
+    } else if (m->actionTimer > 10 + kissduration && m->actionTimer < 55 + kissduration) {
+        // move peach back
+        sEndPeachObj->oPosX -= 0.5f;
+    } else if (m->actionTimer > 146 && m->actionTimer < 191) {
+        // move peach to luigi
+        sEndPeachObj->oPosX -= 0.5f;
+    } else if (m->actionTimer > 146 + kissduration && m->actionTimer < 191 + kissduration) {
+        // move peach back
+        sEndPeachObj->oPosX += 0.5f;
+    }
     switch (m->actionTimer) {
         case 8:
             D_8032CBE8 = 0;
@@ -2186,7 +2216,31 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
             D_8032CBE4 = 0;
             break;
 
-        case 140:
+        case 144:
+            D_8032CBE8 = 0;
+            break;
+
+        case 146:
+            D_8032CBE4 = 3;
+            break;
+
+        case 186:
+            D_8032CBE4 = 4;
+            break;
+
+        case 211:
+            m->marioBodyState->eyeState = MARIO_EYES_HALF_CLOSED;
+            break;
+
+        case 212:
+            m->marioBodyState->eyeState = MARIO_EYES_CLOSED;
+            break;
+
+        case 236:
+            D_8032CBE4 = 3;
+            break;
+
+        case 240:
             advance_cutscene_step(m);
             break;
     }
@@ -2194,6 +2248,7 @@ static void end_peach_cutscene_kiss_from_peach(struct MarioState *m) {
 
 static void end_peach_cutscene_star_dance(struct MarioState *m) {
     s32 animFrame = set_mario_animation(m, MARIO_ANIM_CREDITS_PEACE_SIGN);
+    sEndPeachAnimation = 9;
 
     if (animFrame == 77) {
         cutscene_put_cap_on(m);
@@ -2227,10 +2282,10 @@ static void end_peach_cutscene_star_dance(struct MarioState *m) {
             break;
 
         case 140:
-#ifndef VERSION_JP
-            sequence_player_unlower(0, 60);
-#endif
-            play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
+            // sequence_player_unlower(0, 60);
+            if (!m->marioObj->oAnimState) {
+                // play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
+            }
             break;
 
         case 142:
@@ -2257,12 +2312,10 @@ static void end_peach_cutscene_dialog_3(struct MarioState *m) {
             sEndToadAnims[1] = 2;
             D_8032CBE8 = 1;
             set_cutscene_message(160, 227, 5, 30);
-#ifndef VERSION_JP
             play_sound(SOUND_PEACH_BAKE_A_CAKE, sEndPeachObj->soundOrigin);
-#endif
             break;
 
-        case 55:
+        case 38:
             set_cutscene_message(160, 227, 6, 40);
             break;
 
@@ -2295,6 +2348,9 @@ static void end_peach_cutscene_run_to_castle(struct MarioState *m) {
 #ifndef VERSION_JP
         play_sound(SOUND_PEACH_MARIO2, sEndPeachObj->soundOrigin);
 #endif
+    }
+    if (m->actionTimer == 148) {
+        play_cutscene_music(SEQUENCE_ARGS(15, SEQ_EVENT_CUTSCENE_CREDITS));
     }
     if (m->actionTimer == 389) {
         advance_cutscene_step(m);
@@ -2374,15 +2430,18 @@ static s32 act_end_peach_cutscene(struct MarioState *m) {
     sEndCutsceneVp.vp.vscale[1] = 360;
     sEndCutsceneVp.vp.vtrans[0] = 640;
     sEndCutsceneVp.vp.vtrans[1] = 480;
+    // if (!m->marioObj->oAnimState){
     func_8027A220(NULL, &sEndCutsceneVp, 0, 0, 0);
+    //}
 
     return FALSE;
 }
 
+
+//print "mod by kaze"
 static s32 act_credits_cutscene(struct MarioState *m) {
     s32 width;
     s32 height;
-
     m->statusForCamera->unk1C[1] = 13;
     // checks if mario is underwater (JRB, DDD, SA, etc.)
     if (m->pos[1] < m->waterLevel - 100) {

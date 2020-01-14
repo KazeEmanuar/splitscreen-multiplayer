@@ -264,6 +264,7 @@ static void chain_chomp_released_trigger_cutscene(void) {
         && cutscene_object(CUTSCENE_STAR_SPAWN, o) == 1) {
         o->oChainChompReleaseStatus = CHAIN_CHOMP_RELEASED_LUNGE_AROUND;
         o->oTimer = 0;
+        o->oDamageOrCoinValue = 0;
     }
 }
 
@@ -278,15 +279,9 @@ static void chain_chomp_released_lunge_around(void) {
     if (o->oMoveFlags & OBJ_MOVE_MASK_ON_GROUND) {
         // Before first bounce, turn toward mario and wait 2 seconds
         if (o->oChainChompNumLunges == 0) {
-            if (obj_rotate_yaw_toward(o->oAngleToMario, 0x320)) {
-                if (o->oTimer > 60) {
                     o->oChainChompNumLunges += 1;
                     // enable wall collision
                     o->oWallHitboxRadius = 200.0f;
-                }
-            } else {
-                o->oTimer = 0;
-            }
         } else {
             if (++o->oChainChompNumLunges <= 5) {
                 PlaySound2(SOUND_GENERAL_CHAIN_CHOMP1);

@@ -127,7 +127,9 @@ void run_demo_inputs(void) {
         } else {
             // backup the start button if it is pressed, since we don't want the
             // demo input to override the mask where start may have been pressed.
-            u16 startPushed = (gControllers[1].controllerData->button| gControllers[0].controllerData->button) & START_BUTTON;
+            u16 startPushed =
+                (gControllers[1].controllerData->button | gControllers[0].controllerData->button)
+                & START_BUTTON;
 
             // perform the demo inputs by assigning the current button mask and the stick inputs.
             gControllers[0].controllerData->stick_x = gCurrDemoInput->rawStickX;
@@ -164,11 +166,6 @@ void read_controller_inputs(void) {
 
     // if any controllers are plugged in, update the
     // controller information.
-    if (gControllerBits) {
-        osRecvMesg(&gSIEventMesgQueue, &D_80339BEC, OS_MESG_BLOCK);
-        osContGetReadData(&gControllerPads[0]);
-    }
-    run_demo_inputs();
 
     for (i = 0; i < activePlayers; i++) {
         struct Controller *controller = &gControllers[i];
@@ -216,7 +213,6 @@ void init_controllers(void) {
     gControllers[0].statusData = &gControllerStatuses[0];
     gControllers[0].controllerData = &gControllerPads[0];
     osContInit(&gSIEventMesgQueue, &gControllerBits, &gControllerStatuses[0]);
-
     // strangely enough, the EEPROM probe for save data is done in this function.
     // save pak detection?
     gEepromProbe = osEepromProbe(&gSIEventMesgQueue);
@@ -284,6 +280,8 @@ void thread5_game_loop(UNUSED void *arg) {
         // if the reset timer is active, run the process to reset the game.
         if (gResetTimer) {
             func_80247D84();
+           // gCurrLevelNum = LEVEL_MIN;
+           // luigiCamFirst = 0;
             continue;
         }
         profiler_log_thread5_time(THREAD5_START);
@@ -296,12 +294,16 @@ void thread5_game_loop(UNUSED void *arg) {
 
         audio_game_loop_tick();
         func_80247FAC();
-        if (!luigiCamFirst) {           //dont drop inputs 50% of the time. you also need to put the game to 60fps and run object loops every other frame. implement frame skip.
+        if (gControllerBits) {
+            osRecvMesg(&gSIEventMesgQueue, &D_80339BEC, OS_MESG_BLOCK);
+            osContGetReadData(&gControllerPads[0]);
+        }
+        if (!luigiCamFirst) { // dont drop inputs 50% of the time. you also need to put the game to
+                              // 60fps and run object loops every other frame. implement frame skip.
             read_controller_inputs();
         }
         addr = level_script_execute(addr);
 
-        
         display_and_vsync();
 
         // when debug info is enabled, print the "BUF %d" information.

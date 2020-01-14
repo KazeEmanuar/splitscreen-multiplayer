@@ -6,8 +6,8 @@ static struct ObjectHitbox sBooGivingStarHitbox = {
     /* damageOrCoinValue: */ 3,
     /* health: */            3,
     /* numLootCoins: */      0,
-    /* radius: */            140,
-    /* height: */            80,
+    /* radius: */            70,
+    /* height: */            70,
     /* hurtboxRadius: */     40,
     /* hurtboxHeight: */     60,
 };

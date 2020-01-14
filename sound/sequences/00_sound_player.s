@@ -2810,7 +2810,7 @@ layer_jump .layer_C4E
   chan_end
 
   .layer_E6F:
-  layer_note1 39, 0x2bc, 127
+  layer_note1 39, 0x2fc, 127
   layer_end
 
   .sound_mario_waha:
@@ -3016,7 +3016,7 @@ layer_jump .layer_C4E
   chan_end
 
   .layer_F18:
-  layer_note1 39, 0x46, 127
+  layer_note1 39, 0x86, 127
   layer_end
 
   .sound_peach_power_of_the_stars:
@@ -3064,6 +3064,7 @@ layer_jump .layer_C4E
   layer_end
 
   .sound_peach_bake_a_cake:
+  chan_transpose 0
   chan_setbank 10
   chan_setinstr 21
   chan_setlayer 0, .layer_F66
@@ -3082,7 +3083,7 @@ layer_jump .layer_C4E
   chan_end
 
   .layer_F76:
-  layer_note1 39, 0x50, 127
+  layer_note1 39, 0x70, 127
   layer_end
 
   .sound_peach_mario2:
@@ -3095,7 +3096,7 @@ layer_jump .layer_C4E
   chan_end
 
   .layer_F8A:
-  layer_note1 39, 0x50, 127
+  layer_note1 39, 0xb0, 127
   layer_end
 .endif
 

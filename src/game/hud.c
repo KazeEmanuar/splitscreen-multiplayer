@@ -389,7 +389,6 @@ void render_hud_camera_status(void) {
     s32 x;
     s32 y;
     int i;
-    // gMarioStates[0].thisPlayerCamera->hudStatus;
     for (i = 0; i < activePlayers; i++) {
         if (gMarioStates[i].thisPlayerCamera == NULL) {
             return;

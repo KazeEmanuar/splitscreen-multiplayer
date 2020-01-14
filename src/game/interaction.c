@@ -125,7 +125,7 @@ static u32 sBackwardKnockbackActions[][3] = {
 };
 
 static u8 sDisplayingDoorText = FALSE;
-static u8 sJustTeleported = FALSE;
+u8 sJustTeleported = FALSE;
 static u8 timeSinceWarp = 0;
 static u8 sPssSlideStarted = FALSE;
 
@@ -308,7 +308,7 @@ void mario_stop_riding_and_holding(struct MarioState *m) {
 
     if (m->action == ACT_RIDING_HOOT) {
         m->usedObj->oInteractStatus = 0;
-        m->usedObj->oHootMarioReleaseTime = gGlobalTimer/2;
+        m->usedObj->oHootMarioReleaseTime = gGlobalTimer / 2;
     }
 }
 
@@ -341,7 +341,8 @@ u32 mario_lose_cap_to_enemy(u32 arg) {
 
     if (does_mario_have_hat(gMarioState)) {
         save_file_set_flags(arg == 1 ? SAVE_FLAG_CAP_ON_KLEPTO : SAVE_FLAG_CAP_ON_UKIKI);
-        gMarioState->flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
+        gMarioStates[0].flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
+        gMarioStates[1].flags &= ~(MARIO_NORMAL_CAP | MARIO_CAP_ON_HEAD);
         wasWearingCap = TRUE;
     }
 
@@ -351,8 +352,10 @@ u32 mario_lose_cap_to_enemy(u32 arg) {
 void mario_retrieve_cap(void) {
     mario_drop_held_object(gMarioState);
     save_file_clear_flags(SAVE_FLAG_CAP_ON_KLEPTO | SAVE_FLAG_CAP_ON_UKIKI);
-    gMarioState->flags &= ~MARIO_CAP_ON_HEAD;
-    gMarioState->flags |= MARIO_NORMAL_CAP | MARIO_CAP_IN_HAND;
+    gMarioStates[0].flags &= ~MARIO_CAP_ON_HEAD;
+    gMarioStates[0].flags |= MARIO_NORMAL_CAP | MARIO_CAP_IN_HAND;
+    gMarioStates[1].flags &= ~MARIO_CAP_ON_HEAD;
+    gMarioStates[1].flags |= MARIO_NORMAL_CAP | MARIO_CAP_IN_HAND;
 }
 
 u32 able_to_grab_object(struct MarioState *m, UNUSED struct Object *o) {
@@ -711,7 +714,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
 
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && (gMarioStates[0].numCoins + gMarioStates[1].numCoins) - o->oDamageOrCoinValue < 100
+    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum)
+        && (gMarioStates[0].numCoins + gMarioStates[1].numCoins) - o->oDamageOrCoinValue < 100
         && ((gMarioStates[0].numCoins + gMarioStates[1].numCoins) >= 100)) {
         bhv_spawn_star_objects(6);
     }
@@ -840,6 +844,7 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
                        m->marioObj->soundOrigin);
 
             mario_stop_riding_object(m);
+            sJustTeleported = TRUE;
             return set_mario_action(m, ACT_DISAPPEARED, (WARP_OP_WARP_OBJECT << 16) + 2);
         }
     }
@@ -1001,10 +1006,6 @@ u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *
             sDisplayingDoorText = TRUE;
             return set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, text);
         }
-    } else if (m->action == ACT_IDLE && sDisplayingDoorText == TRUE && requiredNumStars == 70) {
-        m->interactObj = o;
-        m->usedObj = o;
-        return set_mario_action(m, ACT_ENTERING_STAR_DOOR, func_8024D664(m, o));
     }
 
     return FALSE;
@@ -1319,7 +1320,6 @@ u32 interact_bounce_top(struct MarioState *m, UNUSED u32 interactType, struct Ob
     return FALSE;
 }
 
-
 u32 interact_unknown_31(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     u32 interaction;
     if (m->flags & MARIO_METAL_CAP) {
@@ -1350,7 +1350,6 @@ u32 interact_unknown_31(struct MarioState *m, UNUSED u32 interactType, struct Ob
     }
     return FALSE;
 }
-
 
 u32 interact_unknown_08(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     u32 interaction = determine_interaction(m, o);
@@ -1491,7 +1490,7 @@ u32 interact_hoot(struct MarioState *m, UNUSED u32 interactType, struct Object *
     //! Can pause to advance the global timer without falling too far, allowing
     // you to regrab after letting go.
     if (actionId >= 0x080 && actionId < 0x098
-        && (gGlobalTimer/2 - m->usedObj->oHootMarioReleaseTime > 30)) {
+        && (gGlobalTimer / 2 - m->usedObj->oHootMarioReleaseTime > 30)) {
         mario_stop_riding_and_holding(m);
         o->oInteractStatus = INT_STATUS_HOOT_GRABBED_BY_MARIO;
         m->interactObj = o;
@@ -1709,6 +1708,8 @@ void mario_process_interactions(struct MarioState *m) {
                     m->collidedObjInteractTypes &= ~interactType;
 
                     if (!(object->oInteractStatus & INT_STATUS_INTERACTED)) {
+                        m->usedObj = object;
+                        m->interactObj = object;
                         if (sInteractionHandlers[i].handler(m, interactType, object)) {
                             break;
                         }
@@ -1739,15 +1740,17 @@ void check_death_barrier(struct MarioState *m) {
     if (m->pos[1] < m->floorHeight + 2048.0f) {
         m->vel[1] = 5.f;
         m->pos[1] = m->floorHeight + 2050.0f;
-        sSourceWarpNodeId = 0xf1;
-        if (level_trigger_warp(m, WARP_OP_WARP_FLOOR) == 20 && !(m->flags & MARIO_UNKNOWN_18)) {
-            play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->soundOrigin);
+        if (m->action != ACT_BUBBLED) {
+            sSourceWarpNodeId = 0xf1;
+            if (level_trigger_warp(m, WARP_OP_WARP_FLOOR) == 20 && !(m->flags & MARIO_UNKNOWN_18)) {
+                play_sound(SOUND_MARIO_WAAAOOOW, m->marioObj->soundOrigin);
+            }
         }
     }
 }
 
 void check_lava_boost(struct MarioState *m) {
-    if (!(m->action & ACT_FLAG_RIDING_SHELL) && m->pos[1] < m->floorHeight + 10.0f) {
+    if (!(m->action & ACT_FLAG_RIDING_SHELL) && (m->pos[1] < m->floorHeight + 10.0f) && !(m->action == ACT_BUBBLED)) {
         if (!(m->flags & MARIO_METAL_CAP)) {
             m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 12 : 18;
         }
@@ -1792,7 +1795,7 @@ void mario_handle_special_floors(struct MarioState *m) {
                 break;
 
             case SURFACE_WARP:
-                level_trigger_warp(m, WARP_OP_WARP_FLOOR); // bad name this is death warp
+                level_trigger_warp(m, 0x99); // bad name this is the warp that sets the ship warp
                 break;
 
             case SURFACE_TIMER_START:

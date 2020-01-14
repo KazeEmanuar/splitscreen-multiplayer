@@ -2418,9 +2418,7 @@ void update_camera(struct LevelCamera *c) {
             play_sound_button_change_blocked();
         }
     }
-    // if (!luigiCamFirst || (gMarioStates[0].controller->buttonDown & L_TRIG)) {
-    func_80285E70(c); // actually positions the camera
-    //}
+    func_80285E70(c);
     gCameraStatus[c->cameraID].lastFrameAction = (&gPlayerStatusForCamera[c->cameraID])->action;
 }
 
@@ -4183,7 +4181,9 @@ u8 return_cutscene_table(struct LevelCamera *c) {
                 cutscene = CUTSCENE_GRAND_STAR;
                 break;
             case 11:
-                cutscene = CUTSCENE_PEACH_END;
+                if (!c->cameraID) {
+                    cutscene = CUTSCENE_PEACH_END;
+                }
                 break;
             case 12:
                 cutscene = CUTSCENE_END_WAVING;
@@ -5875,17 +5875,21 @@ CmdRet CutscenePeachEnd1(struct LevelCamera *c) {
 }
 
 CmdRet CutscenePeachEnd4_1(struct LevelCamera *c) {
-    vec3f_set(c->pos, 179.f, 2463.f, -1216.f);
-    c->pos[1] = gCutsceneFocus[c->cameraID]->oPosY + 35.f;
-    vec3f_set(c->focus, gCutsceneFocus[c->cameraID]->oPosX, gCutsceneFocus[c->cameraID]->oPosY + 125.f,
-              gCutsceneFocus[c->cameraID]->oPosZ);
+    if (gCutsceneFocus[c->cameraID] != NULL) {
+        vec3f_set(c->pos, 179.f, 2463.f, -1216.f);
+        c->pos[1] = gCutsceneFocus[c->cameraID]->oPosY + 35.f;
+        vec3f_set(c->focus, gCutsceneFocus[c->cameraID]->oPosX,
+                  gCutsceneFocus[c->cameraID]->oPosY + 125.f, gCutsceneFocus[c->cameraID]->oPosZ);
+    }
 }
 
 CmdRet CutscenePeachEnd4(struct LevelCamera *c) {
-    call_cutscene_func_in_time_range(CutscenePeachEnd4_1, c, 0, 0);
-    approach_f32_exponential_bool(&c->pos[1], gCutsceneFocus[c->cameraID]->oPosY + 35.f, 0.02f);
-    approach_f32_exponential_bool(&c->focus[1], gCutsceneFocus[c->cameraID]->oPosY + 125.f, 0.15f);
-    move_credits_camera(c, -0x2000, 0x2000, -0x2000, 0x2000);
+    if (gCutsceneFocus[c->cameraID] != NULL) {
+        call_cutscene_func_in_time_range(CutscenePeachEnd4_1, c, 0, 0);
+        approach_f32_exponential_bool(&c->pos[1], gCutsceneFocus[c->cameraID]->oPosY + 35.f, 0.02f);
+        approach_f32_exponential_bool(&c->focus[1], gCutsceneFocus[c->cameraID]->oPosY + 125.f, 0.15f);
+        move_credits_camera(c, -0x2000, 0x2000, -0x2000, 0x2000);
+    }
 }
 
 CmdRet CutscenePeachEnd5_1(UNUSED struct LevelCamera *c) {
@@ -5912,14 +5916,16 @@ CmdRet CutscenePeachEnd5_4(struct LevelCamera *c) {
 }
 
 CmdRet CutscenePeachEnd5(struct LevelCamera *c) {
-    call_cutscene_func_in_time_range(CutscenePeachEnd5_1, c, 0, 0);
-    call_cutscene_func_in_time_range(CutscenePeachEnd5_2, c, 0, 299);
-    call_cutscene_func_in_time_range(CutscenePeachEnd5_4, c, 300, -1);
-    call_cutscene_func_in_time_range(CutscenePeachEnd5_3, c, 300, -1);
-    vec3f_set(c->focus, gCutsceneFocus[c->cameraID]->oPosX,
-              D_8033B6F0[2][c->cameraID].unk4[1] + gCutsceneFocus[c->cameraID]->oPosY,
-              gCutsceneFocus[c->cameraID]->oPosZ);
-    move_credits_camera(c, -0x2000, 0x2000, -0x2000, 0x2000);
+    if (gCutsceneFocus[c->cameraID] != NULL) {
+        call_cutscene_func_in_time_range(CutscenePeachEnd5_1, c, 0, 0);
+        call_cutscene_func_in_time_range(CutscenePeachEnd5_2, c, 0, 299);
+        call_cutscene_func_in_time_range(CutscenePeachEnd5_4, c, 300, -1);
+        call_cutscene_func_in_time_range(CutscenePeachEnd5_3, c, 300, -1);
+        vec3f_set(c->focus, gCutsceneFocus[c->cameraID]->oPosX,
+                  D_8033B6F0[2][c->cameraID].unk4[1] + gCutsceneFocus[c->cameraID]->oPosY,
+                  gCutsceneFocus[c->cameraID]->oPosZ);
+        move_credits_camera(c, -0x2000, 0x2000, -0x2000, 0x2000);
+    }
 }
 
 CmdRet CutscenePeachEnd6(struct LevelCamera *c) {
@@ -7659,18 +7665,13 @@ CmdRet CutsceneIntroPeach1(UNUSED struct LevelCamera *c) {
 
 CmdRet CutsceneIntroPeach0(struct LevelCamera *c) {
     func_80299C60(5, 0, c);
-    call_cutscene_func_in_time_range(CutsceneIntroPeach0_1, c, 0, 0);
-    call_cutscene_func_in_time_range(CutsceneIntroPeach0_2, c, 65, 65);
-#ifdef VERSION_EU
-    call_cutscene_func_in_time_range(CutsceneIntroPeach_unkEU, c, 68, 68);
-#endif
-    call_cutscene_func_in_time_range(CutsceneIntroPeachCommon, c, 0, 0);
-    call_cutscene_func_in_time_range(peach_letter_text, c, 65, 65);
-#ifndef VERSION_JP
-    call_cutscene_func_in_time_range(play_sound_peach_reading_letter, c, 83, 83);
-#endif
+    call_cutscene_func_in_time_range(CutsceneIntroPeach0_1, c, 0, 0);             // zooms out
+    call_cutscene_func_in_time_range(CutsceneIntroPeach0_2, c, 65, 65);           // play song
+    call_cutscene_func_in_time_range(CutsceneIntroPeachCommon, c, 0, 0);          // positions camera
+    call_cutscene_func_in_time_range(peach_letter_text, c, 65, 65);               // shows text
+    call_cutscene_func_in_time_range(play_sound_peach_reading_letter, c, 83, 83); // plays voice
 
-    if ((gCutsceneTimer[c->cameraID] > 120) && (get_dialog_id() == -1)) {
+    if ((gCutsceneTimer[c->cameraID] > 240) && (get_dialog_id() == -1)) {
         gCutsceneTimer[c->cameraID] = 0x7FFF;
     }
 
@@ -8223,12 +8224,12 @@ CmdRet CutsceneDoorAB_2(struct LevelCamera *c) {
     }
 }
 
-// Cutscene Tables
+// Cutscene Tables KISSY extend the camera when she kisses mario
 struct CutsceneTableEntry TableCutscenePeachEnd[12] = {
-    { CutscenePeachEnd0, 170 }, { CutscenePeachEnd1, 70 },    { CutscenePeachEnd2, 75 },
-    { CutscenePeachEnd3, 386 }, { CutscenePeachEnd4, 139 },   { CutscenePeachEnd5, 590 },
-    { CutscenePeachEnd6, 95 },  { CutscenePeachEnd7, 425 },   { CutscenePeachEnd8, 236 },
-    { CutscenePeachEnd9, 245 }, { CutscenePeachEndA, 32767 }, { CutscenePeachEndB, 0 }
+    { CutscenePeachEnd0, 340 }, { CutscenePeachEnd1, 140 },    { CutscenePeachEnd2, 150 },
+    { CutscenePeachEnd3, 772 }, { CutscenePeachEnd4, 278 },   { CutscenePeachEnd5, 1080 },
+    { CutscenePeachEnd6, 190 },  { CutscenePeachEnd7, 850 },   { CutscenePeachEnd8, 472 },
+    { CutscenePeachEnd9, 490 }, { CutscenePeachEndA, 32767 }, { CutscenePeachEndB, 0 }
 };
 
 struct CutsceneTableEntry TableCutsceneGrandStar[2] = { { CutsceneGrandStar0, 360 },

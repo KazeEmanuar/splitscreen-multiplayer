@@ -63,7 +63,7 @@ Dialog002: # 0x02008A68
 
 .balign 4
 Dialog003: # 0x02008B34
-.byte _("Thank you, Mario! The Big\n"
+.byte _("Thank you! The Big\n"
         "Bob-omb is nothing but a\n"
         "big dud now! But the\n"
         "battle for the castle has\n"
@@ -92,7 +92,7 @@ Dialog004: # 0x02008BFC
 
 .balign 4
 Dialog005: # 0x02008C80
-.byte _("Hey, Mario! Is it true\n"
+.byte _("Hey! Is it true\n"
         "that you beat the Big\n"
         "Bob-omb? Cool!\n"
         "You must be strong. And\n"
@@ -180,7 +180,7 @@ Dialog011: # 0x02008F68
 .byte _("You've just stepped on\n"
         "the Metal Cap Switch!\n"
         "The Metal Cap makes\n"
-        "Mario invincible.\n"
+        "You invincible.\n"
         "Now Metal Caps will\n"
         "pop out of all of the\n"
         "green blocks you find.\n"
@@ -194,7 +194,7 @@ Dialog012: # 0x02008FD8
 .byte _("You've just stepped on\n"
         "the Vanish Cap Switch.\n"
         "The Vanish Cap makes\n"
-        "Mario disappear.\n"
+        "You disappear.\n"
         "Now Vanish Caps will pop\n"
         "from all of the blue\n"
         "blocks you find.\n"
@@ -206,7 +206,7 @@ Dialog012: # 0x02008FD8
 .balign 4
 Dialog013: # 0x02009048
 .byte _("You've collected 100\n"
-        "coins! Mario gains more\n"
+        "coins! You gain more\n"
         "power from the castle.\n"
         "Do you want to Save?\n"
         "//Yes////No")
@@ -214,7 +214,7 @@ Dialog013: # 0x02009048
 .balign 4
 Dialog014: # 0x020090A0
 .byte _("Wow! Another Power Star!\n"
-        "Mario gains more courage\n"
+        "You gain more courage\n"
         "from the power of the\n"
         "castle.\n"
         "Do you want to Save?\n"
@@ -254,8 +254,7 @@ Dialog017: # 0x020091A8
         "\n"
         "...and you'll never take\n"
         "away my Power Star. I\n"
-        "hereby challenge you,\n"
-        "Mario!\n"
+        "hereby challenge you!\n"
         "If you want the Star I\n"
         "hold, you must prove\n"
         "yourself in battle.\n"
@@ -279,7 +278,7 @@ Dialog019: # 0x02009284
 
 .balign 4
 Dialog020: # 0x02009298
-.byte _("Dear Mario:\n"
+.byte _("Dear Mario and Luigi:\n"
         "Please come to the\n"
         "castle. I've baked\n"
         "a cake for you.\n"
@@ -353,7 +352,7 @@ Dialog029: # 0x02009480
 Dialog030: # 0x020094D4
 .byte _("Hello! The Lakitu Bros.,\n"
         "cutting in with a live\n"
-        "update on Mario's\n"
+        "update on the brothers's\n"
         "progress. He's about to\n"
         "learn a technique for\n"
         "sneaking up on enemies.\n"
@@ -385,7 +384,7 @@ Dialog031: # 0x0200957C
         "Here, I guess I have to\n"
         "hand over this Star to\n"
         "the winner of the race.\n"
-        "Congrats, Mario!")
+        "Congrats!")
 
 .balign 4
 Dialog032: # 0x020095C8
@@ -414,7 +413,7 @@ Dialog033: # 0x02009638
         "Press [B] to read signs,\n"
         "too. Use the Control Stick\n"
         "in the center of the\n"
-        "controller to move Mario\n"
+        "controller to move\n"
         "around. Now, head for\n"
         "the castle.")
 
@@ -426,7 +425,7 @@ Dialog034: # 0x020096C4
         "outside the Princess's\n"
         "castle.\n"
         "\n"
-        "Mario has just arrived\n"
+        "The brothers have arrived\n"
         "on the scene, and we'll\n"
         "be filming the action live\n"
         "as he enters the castle\n"
@@ -461,7 +460,7 @@ Dialog035: # 0x02009800
         "to look around using the\n"
         "Control Stick.\n"
         "\n"
-        "You'll usually see Mario\n"
+        "You'll usually see yourself\n"
         "through Lakitu's camera.\n"
         "It is the camera\n"
         "recommended for normal\n"
@@ -469,13 +468,13 @@ Dialog035: # 0x02009800
         "You can change angles by\n"
         "pressing [C]>. If you press\n"
         "[R], the view switches to\n"
-        "Mario's camera, which\n"
+        "Player's camera, which\n"
         "is directly behind him.\n"
         "Press [R] again to return\n"
         "to Lakitu's camera. Press\n"
-        "[C]| to see Mario from\n"
+        "[C]| to see yourself from\n"
         "afar, using either\n"
-        "Lakitu's or Mario's view.")
+        "Lakitu's or Player's view.")
 
 .balign 4
 Dialog036: # 0x02009908
@@ -485,8 +484,8 @@ Dialog036: # 0x02009908
         "anything!\n"
         "\n"
         "Press [R] to switch to\n"
-        "Mario's camera. It\n"
-        "always follows Mario.\n"
+        "Player's camera. It\n"
+        "always follows You.\n"
         "Press [R] again to switch\n"
         "to Lakitu's camera.\n"
         "Pause the game and\n"
@@ -560,7 +559,7 @@ Dialog042: # 0x02009B80
         "When you want to let go,\n"
         "either press [Z] or press\n"
         "the Control Stick in the\n"
-        "direction of Mario's back.\n"
+        "direction of your back.\n"
         "To climb up, press Up on\n"
         "the Control Stick. To\n"
         "scurry up quickly, press\n"
@@ -596,7 +595,7 @@ Dialog044: # 0x02009C68
 Dialog045: # 0x02009D1C
 .byte _("Whew! I'm just about\n"
         "flapped out. You should\n"
-        "lay off the pasta, Mario!\n"
+        "lay off the pasta!\n"
         "That's it for now. Press\n"
         "[A] to let go. Okay,\n"
         "bye byyyyyyeeee!")
@@ -722,7 +721,7 @@ Dialog054: # 0x0200A1F4
 
 .balign 4
 Dialog055: # 0x0200A234
-.byte _("Hey-ey, Mario, buddy,\n"
+.byte _("Hey-ey, buddy,\n"
         "howzit goin'? Step right\n"
         "up. You look like a fast\n"
         "sleddin' kind of guy.\n"
@@ -768,7 +767,7 @@ Dialog058: # 0x0200A380
 .byte _("You found my precious,\n"
         "precious baby! Where\n"
         "have you been? How can\n"
-        "I ever thank you, Mario?\n"
+        "I ever thank you?\n"
         "Oh, I do have this...\n"
         "...Star. Here, take it\n"
         "with my eternal\n"
@@ -852,7 +851,7 @@ Dialog064: # 0x0200A638
         "Jump to soar high into\n"
         "the sky.\n"
         "Use the Control Stick to\n"
-        "guide Mario. Pull back to\n"
+        "guide the player. Pull back to\n"
         "to fly up, press forward\n"
         "to nose down, and press [Z]\n"
         "to land.")
@@ -878,7 +877,7 @@ Dialog065: # 0x0200A6AC
         "\n"
         "\n"
         "But remember:\n"
-        "Mario can't breathe under\n"
+        "You can't breathe under\n"
         "the water! Return to the\n"
         "surface for air when the\n"
         "Power Meter runs low.\n"
@@ -889,7 +888,7 @@ Dialog065: # 0x0200A6AC
 
 .balign 4
 Dialog066: # 0x0200A7A8
-.byte _("Mario, it's Peach!\n"
+.byte _("It's Peach!\n"
         "Please be careful! Bowser\n"
         "is so wicked! He will try\n"
         "to burn you with his\n"
@@ -905,18 +904,18 @@ Dialog066: # 0x0200A7A8
         "the farther he'll fly.\n"
         "\n"
         "Use the [C] Buttons to look\n"
-        "around, Mario. You have\n"
+        "around. You have\n"
         "to throw Bowser into one\n"
         "of the bombs in the four\n"
         "corners.\n"
         "Aim well, then press [B]\n"
         "again to launch Bowser.\n"
-        "Good luck, Mario! Our\n"
+        "Good luck! Our\n"
         "fate is in your hands.")
 
 .balign 4
 Dialog067: # 0x0200A884
-.byte _("Tough luck, Mario!\n"
+.byte _("Tough luck!\n"
         "Princess Toadstool isn't\n"
         "here...Gwa ha ha!! Go\n"
         "ahead--just try to grab\n"
@@ -934,7 +933,7 @@ Dialog068: # 0x0200A91C
         "you'll be hopping mad, but\n"
         "don't lose your cool.\n"
         "You can still control\n"
-        "Mario--just try to keep\n"
+        "the player--just try to keep\n"
         "calm!")
 
 .balign 4
@@ -1026,7 +1025,7 @@ Dialog074: # 0x0200AC00
         "To drop from the edge,\n"
         "either press the Control\n"
         "Stick in the direction of\n"
-        "Mario's back or press the\n"
+        "your back or press the\n"
         "[Z] Button.\n"
         "To get up onto the ledge,\n"
         "either press Up on the\n"
@@ -1036,7 +1035,7 @@ Dialog074: # 0x0200AC00
 
 .balign 4
 Dialog075: # 0x0200AC8C
-.byte _("Mario!! My castle is in\n"
+.byte _("My castle is in\n"
         "great peril. I know that\n"
         "Bowser is the cause...and\n"
         "I know that only you can\n"
@@ -1057,9 +1056,9 @@ Dialog075: # 0x0200AC8C
         "Stars!\n"
         "\n"
         "Find that Secret Star,\n"
-        "Mario! It will help you\n"
+        "It will help you\n"
         "on your quest. Please,\n"
-        "Mario, you have to\n"
+        "You have to\n"
         "help us!\n"
         "Retrieve all of the\n"
         "Power Stars in the castle\n"
@@ -1072,7 +1071,7 @@ Dialog076: # 0x0200AD94
 .byte _("Thanks to the power of\n"
         "the Stars, life is\n"
         "returning to the castle.\n"
-        "Please, Mario, you have\n"
+        "Please, you have\n"
         "to give Bowser the boot!\n"
         "\n"
         "Here, let me tell you a\n"
@@ -1146,7 +1145,7 @@ Dialog082: # 0x0200AFB8
         "good for Peach. She's\n"
         "still trapped somewhere\n"
         "inside the walls.\n"
-        "Please, Mario, you have\n"
+        "Please, you have\n"
         "to help her! Did you know\n"
         "that there are enemy\n"
         "worlds inside the walls?\n"
@@ -1162,7 +1161,7 @@ Dialog083: # 0x0200B080
         "jump inside, watch the\n"
         "position of the big hand.\n"
         "Oh, look what I found!\n"
-        "Here, Mario, catch!")
+        "Here, catch!")
 
 .balign 4
 Dialog084: # 0x0200B0E8
@@ -1243,7 +1242,7 @@ Dialog091: # 0x0200B30C
 .balign 4
 Dialog092: # 0x0200B334
 .byte _("Pestering me again, are\n"
-        "you, Mario? Can't you see\n"
+        "you? Can't you see\n"
         "that I'm having a merry\n"
         "little time, making\n"
         "mischief with my minions?\n"
@@ -1253,7 +1252,7 @@ Dialog092: # 0x0200B334
 
 .balign 4
 Dialog093: # 0x0200B3A8
-.byte _("Mario! You again! Well\n"
+.byte _("You again! Well\n"
         "that's just fine--I've\n"
         "been looking for something\n"
         "to fry with my fire\n"
@@ -1498,7 +1497,7 @@ Dialog116: # 0x0200BB50
         "Methinks my troops could\n"
         "learn a lesson from you!\n"
         "Here is your Star, as I\n"
-        "promised, Mario.\n"
+        "promised.\n"
         "\n"
         "If you want to see me\n"
         "again, select this Star\n"
@@ -1565,7 +1564,7 @@ Dialog120: # 0x0200BD0C
 Dialog121: # 0x0200BDA4
 .byte _("Nooo! It can't be!\n"
         "You've really beaten me,\n"
-        "Mario?!! I gave those\n"
+        "I gave those\n"
         "troops power, but now\n"
         "it's fading away!\n"
         "Arrgghh! I can see peace\n"
@@ -1680,7 +1679,7 @@ Dialog131: # 0x0200C154
 
 .balign 4
 Dialog132: # 0x0200C21C
-.byte _("Whoa, Mario, pal, you\n"
+.byte _("Whoa, pal, you\n"
         "aren't trying to cheat,\n"
         "are you? Shortcuts aren't\n"
         "allowed.\n"
@@ -1766,7 +1765,7 @@ Dialog135: # 0x0200C468
 Dialog136: # 0x0200C534
 .byte _("Wow! You've already\n"
         "recovered that many\n"
-        "Stars? Way to go, Mario!\n"
+        "Stars? Way to go!\n"
         "I'll bet you'll have us out\n"
         "of here in no time!\n"
         "\n"
@@ -1796,7 +1795,7 @@ Dialog136: # 0x0200C534
 
 .balign 4
 Dialog137: # 0x0200C614
-.byte _("Thanks, Mario! The castle\n"
+.byte _("Thanks! The castle\n"
         "is recovering its energy\n"
         "as you retrieve Power\n"
         "Stars, and you've chased\n"
@@ -1847,7 +1846,7 @@ Dialog141: # 0x0200C780
         "Bowser's troops are still\n"
         "gaining power, so you\n"
         "can't give up. Save us,\n"
-        "Mario! Keep searching for\n"
+        "Keep searching for\n"
         "Stars!")
 
 .balign 4
@@ -2033,7 +2032,7 @@ Dialog154: # 0x0200CD8C
         "Speaking of lost, the\n"
         "Princess is still stuck in\n"
         "the walls somewhere.\n"
-        "Please help, Mario!\n"
+        "Please help!\n"
         "\n"
         "Oh, you know that there\n"
         "are secret worlds in the\n"
@@ -2045,7 +2044,7 @@ Dialog155: # 0x0200CE48
 .byte _("Thanks to the power of\n"
         "the Stars, life is\n"
         "returning to the castle.\n"
-        "Please, Mario, you have\n"
+        "Please, you have\n"
         "to give Bowser the boot!\n"
         "\n"
         "Here, let me tell you a\n"
@@ -2114,7 +2113,7 @@ Dialog160: # 0x0200D0F8
 
 .balign 4
 Dialog161: # 0x0200D158
-.byte _("Mario!!!\n"
+.byte _("Hey!!!\n"
         "It that really you???\n"
         "It has been so long since\n"
         "our last adventure!\n"
@@ -2160,8 +2159,8 @@ Dialog162: # 0x0200D1E4
 .balign 4
 Dialog163: # 0x0200D260
 .byte _("Noooo! You've really\n"
-        "beaten me this time,\n"
-        "Mario! I can't stand\n"
+        "beaten me this time!\n"
+        "I can't stand\n"
         "losing to you!\n"
         "\n"
         "My troops...worthless!\n"
@@ -2187,7 +2186,7 @@ Dialog163: # 0x0200D260
 
 .balign 4
 Dialog164: # 0x0200D3A8
-.byte _("Mario! What's up, pal?\n"
+.byte _("What's up, pal?\n"
         "I haven't been on the\n"
         "slide lately, so I'm out\n"
         "of shape.\n"

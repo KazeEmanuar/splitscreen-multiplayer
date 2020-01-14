@@ -315,6 +315,7 @@ struct MarioState
     /*0xDA*/ u8 sDelayInvincTimer;
     /*0xDC*/ struct Object *bubble;
     /*0xE0*/ struct Object *pole;
+    /*0xe4*/ u8 grabtimer;
 };
 
 struct StructGeo802D2360

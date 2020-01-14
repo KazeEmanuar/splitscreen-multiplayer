@@ -1981,7 +1981,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
     f32 x;
     f32 z;
     f32 magnitude;
-
+    /*
     magnitude = sqrtf((m->controller->stickX*m->controller->stickX  + m->controller->stickY*m->controller->stickY));
     magnitude = magnitude/inertiaDisplacementScale; //16.0f by default
     x = magnitude * sins(m->intendedYaw);
@@ -1996,7 +1996,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
     }
     if (absf2(m->platformDisplacement[2]+ z) < absf2(m->platformDisplacement[2])){
         m->platformDisplacement[2]+=z;
-    }
+    }*/
 
     if (check_common_airborne_cancels(m)) {
         return TRUE;

@@ -964,7 +964,7 @@ void obj_change_action(s32 action) {
 }
 
 void func_8029F684(f32 f12, f32 f14) {
-    f32 sp4 = gMarioStates[0].forwardVel;
+    f32 sp4 = gMarioStates[gMarioObject->oAnimState].forwardVel;
     f32 sp0 = f12 * f14;
 
     if (sp4 < sp0) {
@@ -1054,7 +1054,7 @@ s32 Unknown8029F930(s16 *a0) {
 }
 
 s32 mario_is_in_air_action(void) {
-    if (gMarioStates[0].action & ACT_FLAG_AIR) {
+    if (gMarioStates[gMarioObject->oAnimState].action & ACT_FLAG_AIR) {
         return TRUE;
     } else {
         return FALSE;
@@ -1062,7 +1062,7 @@ s32 mario_is_in_air_action(void) {
 }
 
 s32 mario_is_dive_sliding(void) {
-    if (gMarioStates[0].action == ACT_DIVE_SLIDE) {
+    if (gMarioStates[gMarioObject->oAnimState].action == ACT_DIVE_SLIDE) {
         return TRUE;
     } else {
         return FALSE;
@@ -2200,8 +2200,13 @@ s32 obj_wait_then_blink(s32 timeUntilBlinking, s32 numBlinks) {
 
 s32 obj_is_mario_ground_pounding_platform(void) {
     struct MarioState *m = gMarioObject->collisionData;
-    if (gMarioObject->platform == o) {
-        if (m->action == ACT_GROUND_POUND_LAND) {
+    if (gMarioState->marioObj->platform == o) {
+        if (gMarioState->action == ACT_GROUND_POUND_LAND) {
+            return TRUE;
+        }
+    }
+    if (gLuigiState->marioObj->platform == o) {
+        if (gLuigiState->action == ACT_GROUND_POUND_LAND) {
             return TRUE;
         }
     }
@@ -2385,11 +2390,11 @@ s32 obj_mario_far_away(void) {
 }
 
 s32 obj_is_mario_moving_fast_or_in_air(s32 speedThreshold) {
-    if (gMarioStates[0].forwardVel > speedThreshold) {
+    if (gMarioStates[gMarioObject->oAnimState].forwardVel > speedThreshold) {
         return TRUE;
     }
 
-    if (gMarioStates[0].action & ACT_FLAG_AIR) {
+    if (gMarioStates[gMarioObject->oAnimState].action & ACT_FLAG_AIR) {
         return TRUE;
     } else {
         return FALSE;

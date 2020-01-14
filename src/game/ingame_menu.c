@@ -1939,33 +1939,10 @@ void do_cutscene_handler(void) {
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
 
-#ifdef VERSION_EU
-    switch (eu_get_language()) {
-        case LANGUAGE_ENGLISH:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsEn[gCutsceneMsgIndex]);
-            break;
-        case LANGUAGE_FRENCH:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsFr[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsFr[gCutsceneMsgIndex + 8]);
-            break;
-        case LANGUAGE_GERMAN:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsDe[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsDe[gCutsceneMsgIndex + 16]);
-            break;
-    }
-#else
     // get the x coordinate of where the cutscene string starts.
     x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex], 10.0f);
 
     print_generic_string(x, 240 - gCutsceneMsgYOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex]);
-#endif
 
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_end);
 
@@ -1981,13 +1958,13 @@ void do_cutscene_handler(void) {
     // screen. if (message_duration = 50) and (msg_timer = 55)
     // then after the first 5 frames, the message will remain
     // on screen for another 50 frames until it starts fading.
-    if (gCutsceneMsgDuration + 5 < gCutsceneMsgTimer) {
+    if (gCutsceneMsgDuration*2 + 5 < gCutsceneMsgTimer) {
         gCutsceneMsgFade -= 50;
     }
 
     // like the first check, it takes 5 frames to fade out, so
     // perform a + 10 to account for the earlier check (10-5=5).
-    if (gCutsceneMsgDuration + 10 < gCutsceneMsgTimer) {
+    if (gCutsceneMsgDuration*2 + 10 < gCutsceneMsgTimer) {
         gCutsceneMsgIndex = -1;
         gCutsceneMsgFade = 0;
         gCutsceneMsgTimer = 0;
@@ -2004,7 +1981,7 @@ extern Gfx castle_grounds_seg7_us_dl_0700F2E8[];
 #ifdef VERSION_JP
 #define PEACH_MESSAGE_TIMER 170
 #else
-#define PEACH_MESSAGE_TIMER 250
+#define PEACH_MESSAGE_TIMER 500
 #endif
 
 #ifdef VERSION_JP

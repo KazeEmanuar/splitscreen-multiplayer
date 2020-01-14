@@ -1403,7 +1403,6 @@ void func_8031F96C(u8 player) {
     }
 }
 
-#ifdef NON_MATCHING
 void process_level_music_dynamics(void) {
     u8 musicDynIndex;       // sp57
     s16 conditionValues[8]; // sp44
@@ -1451,37 +1450,37 @@ void process_level_music_dynamics(void) {
             UNUSED s16 temp;
             switch (conditionTypes[j]) {
                 case MARIO_X_GE: {
-                    s16 temp = gMarioStates[0].pos[0];
+                    s16 temp = (gMarioStates[0].pos[0]+gMarioStates[1].pos[0])/2;
                     if (temp < conditionValues[j])
                         j = condIndex + 1;
                     break;
                 }
                 case MARIO_Y_GE: {
-                    s16 temp = gMarioStates[0].pos[1];
+                    s16 temp = (gMarioStates[0].pos[1]+gMarioStates[1].pos[1])/2;
                     if (temp < conditionValues[j])
                         j = condIndex + 1;
                     break;
                 }
                 case MARIO_Z_GE: {
-                    s16 temp = gMarioStates[0].pos[2];
+                    s16 temp = (gMarioStates[0].pos[2]+gMarioStates[1].pos[2])/2;
                     if (temp < conditionValues[j])
                         j = condIndex + 1;
                     break;
                 }
                 case MARIO_X_LT: {
-                    s16 temp = gMarioStates[0].pos[0];
+                    s16 temp = (gMarioStates[0].pos[0]+gMarioStates[1].pos[0])/2;
                     if (temp >= conditionValues[j])
                         j = condIndex + 1;
                     break;
                 }
                 case MARIO_Y_LT: {
-                    s16 temp = gMarioStates[0].pos[1];
+                    s16 temp = (gMarioStates[0].pos[1]+gMarioStates[1].pos[1])/2;
                     if (temp >= conditionValues[j])
                         j = condIndex + 1;
                     break;
                 }
                 case MARIO_Z_LT: {
-                    s16 temp = gMarioStates[0].pos[2];
+                    s16 temp = (gMarioStates[0].pos[2]+gMarioStates[1].pos[2])/2;
                     if (temp >= conditionValues[j])
                         j = condIndex + 1;
                     break;
@@ -1535,10 +1534,6 @@ void process_level_music_dynamics(void) {
         sCurrentMusicDynamic = musicDynIndex;
     }
 }
-
-#else
-GLOBAL_ASM("asm/non_matchings/process_level_music_dynamics.s")
-#endif
 
 void unused_8031FED0(u8 player, u32 bits, s8 arg2) {
     u8 i;

@@ -748,11 +748,11 @@ void update_mario_sound_and_camera(struct MarioState *m) {
     s32 camPreset = m->thisPlayerCamera->currPreset;
 
     if (action == ACT_FIRST_PERSON) {
-        //func_80248CB8(2);
+        // func_80248CB8(2);
         gCameraMovementFlags[m->thisPlayerCamera->cameraID] &= ~CAM_MOVE_C_UP_MODE;
         func_80285BD8(m->thisPlayerCamera, -1, 1);
     } else if (action == ACT_SLEEPING) {
-        //func_80248CB8(2);
+        // func_80248CB8(2);
     }
 
     if (!(action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER))) {
@@ -977,7 +977,7 @@ static u32 set_mario_action_submerged(struct MarioState *m, u32 action, UNUSED u
 /**
  * Transitions for a variety of cutscene actions.
  */
-static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
+u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
     switch (action) {
         case ACT_EMERGE_FROM_PIPE:
             m->vel[1] = 52.0f;

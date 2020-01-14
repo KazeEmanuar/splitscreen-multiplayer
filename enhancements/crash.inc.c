@@ -99,7 +99,7 @@ void show_crash_screen_and_hang(void) {
         fbFillColor = 0x6253;
         fb_fill(10, 10, 300, 220);
 
-        fb_print_str(80, 20, "AN ERROR HAS OCCURRED!");
+        fb_print_str(80, 20, "SEND THIS SCREEN TO KAZE!");
         fb_print_int_hex(80, 30, errno, 8);
         fb_print_str(107, 30, szErrCodes[errno]);
 
@@ -135,7 +135,7 @@ void show_crash_screen_and_hang(void) {
 
     fb_print_str(80, 50, "PC");
     fb_print_int_hex(95, 50, epc, 32);
-    fb_print_int_hex(215, 50, cop1_get_fpcsr(), 32);
+
     fb_print_gpr_states(80, 70, szGPRegisters1, &exceptionRegContext[6 + 0]);
     fb_print_gpr_states(145, 70, szGPRegisters2, &exceptionRegContext[6 + 15 * 2]);
 

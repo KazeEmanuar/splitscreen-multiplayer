@@ -4,6 +4,7 @@ void func_802A8D18(f32 sp28, f32 sp2C, s32 sp30) {
     struct MarioState *m = gMarioObject->collisionData;
     switch (o->parentObj->oChuckyaUnk88) {
         case 0:
+            o->oTimer = 0;
             break;
         case 1:
             func_802A2008(gMarioObject, o);

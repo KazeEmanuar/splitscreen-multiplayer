@@ -46,7 +46,7 @@ Gfx *Geo18_802764B0(s32 callContext, struct GraphNode *node, Mat4 *c) {
     UNUSED Mat4 *sp18 = c;
 
     if (callContext == GEO_CONTEXT_RENDER) {
-        if (gPlayer1Controller->controllerData != NULL && gWarpTransition.isActive == 0) {
+        if (gPlayer2Controller->controllerData != NULL && gPlayer1Controller->controllerData != NULL && gWarpTransition.isActive == 0) {
             fusion.button =
                 gPlayer2Controller->controllerData->button | gPlayer1Controller->controllerData->button;
             fusion.stick_x = gPlayer2Controller->controllerData->stick_x
@@ -54,6 +54,8 @@ Gfx *Geo18_802764B0(s32 callContext, struct GraphNode *node, Mat4 *c) {
             fusion.stick_y = gPlayer2Controller->controllerData->stick_y
                              + gPlayer1Controller->controllerData->stick_y;
             gd_copy_p1_contpad(&fusion);
+            gCurrLevelNum = LEVEL_MIN;
+            luigiCamFirst = 0;
             //  gd_copy_p1_contpad(gPlayer1Controller->controllerData);
             // taketurns = taketurns^1;
         }

@@ -70,11 +70,11 @@ void bhv_act_selector_star_type_loop(void) {
             if (gCurrentObject->oStarSelectorSize > 1.3) {
                 gCurrentObject->oStarSelectorSize = 1.3;
             }
-            gCurrentObject->oFaceAngleYaw += 0x800;
+            gCurrentObject->oFaceAngleYaw += 0x400;
             break;
         // If the 100 coin star is selected, rotate
         case STAR_SELECTOR_100_COINS:
-            gCurrentObject->oFaceAngleYaw += 0x800;
+            gCurrentObject->oFaceAngleYaw += 0x400;
             break;
     }
     // Scale act selector stars depending of the type selected
