@@ -272,9 +272,10 @@ void piranha_plant_act_biting(void) {
  * This is called from both the "stopped biting" state and the "sleeping" state.
  */
 s32 mario_moving_fast_enough_to_make_piranha_plant_bite(void) {
-    if (gMarioStates->vel[1] > 10.0f)
+    struct MarioState *m = gMarioObject->collisionData;
+    if (m->vel[1] > 10.0f)
         return 1;
-    if (gMarioStates->forwardVel > 10.0f)
+    if (m->forwardVel > 10.0f)
         return 1;
     return 0;
 }

@@ -75,7 +75,7 @@ void bhv_surface_wave_shrinking_init(void) {
 void bhv_wave_trail_loop(void) {
     f32 sp1C = find_water_level(o->oPosX, o->oPosZ);
     if (o->oTimer == 0)
-        if (gGlobalTimer & 1)
+        if (gGlobalTimer & 2)
             mark_object_for_deletion(o);
     o->oPosY = sp1C + 5.0f;
     if (o->oTimer == 0)

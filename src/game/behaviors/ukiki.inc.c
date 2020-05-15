@@ -503,7 +503,7 @@ void ukiki_free_loop(void) {
  * Possibly unused so AnimState could be used for wearing a hat?
  */
 static void ukiki_blink_timer(void) {
-    if (gGlobalTimer % 50 < 7) {
+    if (gGlobalTimer % 100 < 7) {
         o->oAnimState = UKIKI_ANIM_STATE_EYE_CLOSED;
     } else {
         o->oAnimState = UKIKI_ANIM_STATE_DEFAULT;

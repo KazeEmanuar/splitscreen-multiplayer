@@ -103,7 +103,7 @@ void bhv_small_bubbles_loop(void) {
 
 void bhv_fish_group_loop(void) {
     if (gMarioCurrentRoom[0] == 15 || gMarioCurrentRoom[0] == 7 || gMarioCurrentRoom[1] == 15 || gMarioCurrentRoom[1] == 7)
-        if (gGlobalTimer & 1)
+        if (gGlobalTimer & 2)
             spawn_object(o, MODEL_WHITE_PARTICLE_SMALL, bhvSmallParticleBubbles);
 }
 

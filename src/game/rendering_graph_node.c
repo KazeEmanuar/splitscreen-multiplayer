@@ -85,9 +85,9 @@ struct RenderModeContainer renderModeTable_1Cycle[2] = { { {
                                                          { {
                                                              /* z-buffered */
                                                              G_RM_ZB_OPA_SURF,
-                                                             G_RM_AA_ZB_OPA_SURF,
-                                                             G_RM_AA_ZB_OPA_DECAL,
-                                                             G_RM_AA_ZB_OPA_INTER,
+                                                             G_RM_RA_ZB_OPA_SURF,
+                                                             G_RM_RA_ZB_OPA_DECAL,
+                                                             G_RM_RA_ZB_OPA_INTER,
                                                              G_RM_AA_ZB_TEX_EDGE,
                                                              G_RM_AA_ZB_XLU_SURF,
                                                              G_RM_AA_ZB_XLU_DECAL,
@@ -108,9 +108,9 @@ struct RenderModeContainer renderModeTable_2Cycle[2] = { { {
                                                          { {
                                                              /* z-buffered */
                                                              G_RM_ZB_OPA_SURF2,
-                                                             G_RM_AA_ZB_OPA_SURF2,
-                                                             G_RM_AA_ZB_OPA_DECAL2,
-                                                             G_RM_AA_ZB_OPA_INTER2,
+                                                             G_RM_RA_ZB_OPA_SURF2,
+                                                             G_RM_RA_ZB_OPA_DECAL2,
+                                                             G_RM_RA_ZB_OPA_INTER2,
                                                              G_RM_AA_ZB_TEX_EDGE2,
                                                              G_RM_AA_ZB_XLU_SURF2,
                                                              G_RM_AA_ZB_XLU_DECAL2,
@@ -794,7 +794,7 @@ static void geo_process_object(struct Object *node) {
     s32 hasAnimation = (node->header.gfx.node.flags & GRAPH_RENDER_HAS_ANIMATION) != 0;
 
     if (node->header.gfx.unk18 == gCurGraphNodeRoot->areaIndex) {
-        if (node->header.gfx.throwMatrix != NULL) {
+        if (FALSE) {        //KAZE NOTE maybe put this back to the original code and fix the bug properly
             mtxf_mul(gMatStack[gMatStackIndex + 1], (void *) node->header.gfx.throwMatrix,
                      gMatStack[gMatStackIndex]);
         } else if (node->header.gfx.node.flags & 4) {
@@ -1080,7 +1080,7 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
             geo_process_node_and_siblings(node->node.children);
         }
         gCurGraphNodeRoot = NULL;
-        if (gShowDebugText) {
+        if (FALSE) {
             print_text_fmt_int(180, 36, "MEM %d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
         }

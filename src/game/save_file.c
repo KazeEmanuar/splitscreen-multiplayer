@@ -365,6 +365,15 @@ void save_file_reload(void) {
     gSaveFileModified = FALSE;
 }
 
+void get_all_stars(){
+    int i;
+    int j;
+    for (i=0;i<30;i++){
+        for (j=0;j<8;j++){
+                save_file_set_star_flags(gCurrSaveFileNum-1, i, 1<<j);
+        }
+    }
+}
 /**
  * Update the current save file after collecting a star or a key.
  * If coin score is greater than the current high score, update it.

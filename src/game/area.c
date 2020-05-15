@@ -40,8 +40,6 @@ struct Area *gCurrentArea = NULL;
 struct CreditsEntry *gCurrCreditsEntry = NULL;
 Vp *D_8032CE74 = NULL;
 Vp *D_8032CE78 = NULL;
-Vp *D_8032CE74Luigi = NULL;
-Vp *D_8032CE78Luigi = NULL;
 u8 cameraXOR = 0;
 s16 gWarpTransDelay = 0;
 u32 gFBSetColor = 0;
@@ -83,9 +81,9 @@ const char *gNoControllerMsg[] = {
 void func_8027A220(Vp *a, Vp *b, u8 c, u8 d, u8 e) {
     u16 sp6 = ((c >> 3) << 11) | ((d >> 3) << 6) | ((e >> 3) << 1) | 1;
 
-    gFBSetColor = (sp6 << 16) | sp6;
-    D_8032CE74 = a;
-    D_8032CE78 = b;
+//    gFBSetColor = (sp6 << 16) | sp6;
+ //   D_8032CE74 = a;
+  //  D_8032CE78 = b;
 }
 
 void set_warp_transition_rgb(u8 red, u8 green, u8 blue) {
@@ -98,23 +96,18 @@ void set_warp_transition_rgb(u8 red, u8 green, u8 blue) {
 }
 
 void print_intro_text(void) {
-#ifdef VERSION_EU
-    int language = eu_get_language();
-#endif
+                print_text_centered(160, 0xd9, "By Kade Emanuar");
     if ((gGlobalTimer & 0x1F) < 20) {
-        if (gControllerBits == 0) {
-#ifdef VERSION_EU
-            print_text_centered(160, 20, gNoControllerMsg[language]);
-#else
-            print_text_centered(160, 20, "NO CONTROLLER");
-#endif
+        if (gPlayer2Controller->controllerData == NULL || gPlayer1Controller->controllerData == NULL) {
+            if (gPlayer1Controller->controllerData == NULL) {
+                print_text_centered(160, 20, "NO PLAYER 1 CONTROLLER");
+            }
+            if (gPlayer2Controller->controllerData == NULL) {
+                print_text_centered(160, 38, "NO PLAYER 2 CONTROLLER");
+            }
         } else {
-#ifdef VERSION_EU
-            print_text_centered(20, 20, "START");
-#else
             print_text_centered(60, 38, "PRESS");
             print_text_centered(60, 20, "START");
-#endif
         }
     }
 }
@@ -357,15 +350,19 @@ void play_transition_after_delay(s16 transType, s16 time, u8 red, u8 green, u8 b
     gWarpTransDelay = delay; // Number of frames to delay playing the transition.
     play_transition(transType, time, red, green, blue);
 }
-
+// try camera too
 void render_game(void) {
     if (gCurrentArea != NULL && !gWarpTransition.pauseRendering) {
         struct GraphNodeRoot *manip;
         manip = gCurrentArea->unk04;
         // get_object_list_from_behavior(bhvActSelector);
         // count_objects_with_behavior(bhvActSelector);
-
-        if ((gCurrLevelNum != LEVEL_MIN) && count_objects_with_behavior(bhvActSelector) == 0) {
+        inEnd = ((gMarioStates[0].action == ACT_END_PEACH_CUTSCENE)
+                 || (gMarioStates[0].action == ACT_CREDITS_CUTSCENE)
+                 || (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE)
+                 || (gMarioStates[0].action == ACT_END_WAVING_CUTSCENE));
+        if ((gCurrLevelNum != LEVEL_MIN) && (count_objects_with_behavior(bhvActSelector) == 0)
+            && !inEnd) {
             if (horizontal) {
                 manip->width = 0x50;
             } else {
@@ -394,6 +391,15 @@ void render_game(void) {
             // debug
             luigiCamFirst = luigiCamFirst ^ 1;
         } else {
+            if (horizontal) {
+                manip->width = 0xa0;
+                manip->x = manip->width;
+            } else {
+                manip->height = 0x78;
+                manip->y = manip->height;
+            }
+
+
             geo_process_root(gCurrentArea->unk04, D_8032CE74, D_8032CE78, gFBSetColor);
             gSPViewport(gDisplayListHead++, VIRTUAL_TO_PHYSICAL(&D_8032CF00));
             luigiCamFirst = 0;
@@ -407,7 +413,7 @@ void render_game(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render_text_labels();
         do_cutscene_handler();
-        print_displaying_credits_entry();
+        //print_displaying_credits_entry();
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, BORDER_HEIGHT, SCREEN_WIDTH,
                       SCREEN_HEIGHT - BORDER_HEIGHT);
         gPauseScreenMode = render_menus_and_dialogs();
@@ -448,6 +454,4 @@ void render_game(void) {
 
     D_8032CE74 = NULL;
     D_8032CE78 = 0;
-    D_8032CE74Luigi = NULL;
-    D_8032CE78Luigi = 0;
 }

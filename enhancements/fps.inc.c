@@ -32,15 +32,11 @@ u8 gRenderFPS = FALSE;
 void calculate_frameTime_from_OSTime(OSTime diff) {
     gFrameTime += diff * SECONDS_PER_CYCLE;
     gFrames++;
+    gameLagged = (diff * SECONDS_PER_CYCLE)>(0.01667f);
 }
 
 void render_fps(void) {
     // Toggle rendering framerate with the L button.
-    if (gPlayer1Controller->buttonPressed & L_TRIG) {
-        gRenderFPS ^= 1;
-    }
-
-    if (gRenderFPS) {
         OSTime newTime = osGetTime();
 
         calculate_frameTime_from_OSTime(newTime - gLastOSTime);
@@ -55,5 +51,4 @@ void render_fps(void) {
         print_text_fmt_int(FPS_COUNTER_X_POS, FPS_COUNTER_Y_POS, "FPS %d", gFPS);
 
         gLastOSTime = newTime;
-    }
 }

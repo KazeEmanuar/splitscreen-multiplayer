@@ -1,23 +1,25 @@
 // chuckya.c.inc
 
 void func_802A8D18(f32 sp28, f32 sp2C, s32 sp30) {
+    struct MarioState *m = gMarioObject->collisionData;
     switch (o->parentObj->oChuckyaUnk88) {
         case 0:
+            o->oTimer = 0;
             break;
         case 1:
             func_802A2008(gMarioObject, o);
             break;
         case 2:
             gMarioObject->oInteractStatus |= (sp30 + INT_STATUS_MARIO_UNK2);
-            gMarioStates->forwardVel = sp28;
-            gMarioStates->vel[1] = sp2C;
+            m->forwardVel = sp28;
+            m->vel[1] = sp2C;
             o->parentObj->oChuckyaUnk88 = 0;
             break;
         case 3:
             gMarioObject->oInteractStatus |=
                 (INT_STATUS_MARIO_UNK2 + INT_STATUS_MARIO_UNK6); // loads 2 interactions at once?
-            gMarioStates->forwardVel = 10.0f;
-            gMarioStates->vel[1] = 10.0f;
+            m->forwardVel = 10.0f;
+            m->vel[1] = 10.0f;
             o->parentObj->oChuckyaUnk88 = 0;
             break;
     }

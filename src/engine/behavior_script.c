@@ -12,6 +12,7 @@
 #include "game/obj_behaviors_2.h"
 #include "behavior_data.h"
 #include "game/object_list_processor.h"
+#include "game/level_update.h"
 
 static u16 gRandomSeed16;
 
@@ -837,5 +838,8 @@ void cur_object_exec_behavior(void) {
             }
         }
     }
-    gMarioObject = backupMarioObject;
+    // gMarioObject = backupMarioObject;
+    if ((gMarioStates[0].marioObj != NULL) && ((gMarioStates[0].marioObj->behavior) == segmented_to_virtual(bhvMario))) {
+        gMarioObject = gMarioStates[0].marioObj;
+    }
 }

@@ -15,6 +15,7 @@
 #include "interaction.h"
 #include "camera.h"
 #include "object_helpers.h"
+#include "level_update.h"
 
 #define POLE_NONE 0
 #define POLE_TOUCHED_FLOOR 1
@@ -66,6 +67,8 @@ s32 set_pole_position(struct MarioState *m, f32 offsetY) {
     s32 result = POLE_NONE;
     f32 poleTop = m->usedObj->hitboxHeight - 100.0f;
     struct Object *marioObj = m->marioObj;
+    m->interactObj = m->pole;
+    m->usedObj = m->pole;
 
     if (marioObj->oMarioPolePos > poleTop) {
         marioObj->oMarioPolePos = poleTop;
@@ -187,6 +190,8 @@ s32 act_climbing_pole(struct MarioState *m) {
     s32 sp24;
     struct Object *marioObj = m->marioObj;
     s16 cameraAngle = m->thisPlayerCamera->trueYaw;
+    m->interactObj = m->pole;
+    m->usedObj = m->pole;
 
 #ifndef VERSION_JP
     if (m->health < 0x100) {
@@ -221,7 +226,10 @@ s32 act_climbing_pole(struct MarioState *m) {
 }
 
 s32 act_grab_pole_slow(struct MarioState *m) {
+    m->interactObj = m->pole;
+    m->usedObj = m->pole;
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
+    ;
 
     if (set_pole_position(m, 0.0f) == POLE_NONE) {
         set_mario_animation(m, MARIO_ANIM_GRAB_POLE_SHORT);
@@ -236,6 +244,8 @@ s32 act_grab_pole_slow(struct MarioState *m) {
 
 s32 act_grab_pole_fast(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
+    m->interactObj = m->pole;
+    m->usedObj = m->pole;
 
     play_sound_if_no_flag(m, SOUND_MARIO_WHOA, MARIO_MARIO_SOUND_PLAYED);
     m->faceAngle[1] += marioObj->oMarioPoleYawVel;
@@ -259,7 +269,8 @@ s32 act_grab_pole_fast(struct MarioState *m) {
 
 s32 act_top_of_pole_transition(struct MarioState *m) {
     struct Object *marioObj = m->marioObj;
-
+    m->interactObj = m->pole;
+    m->usedObj = m->pole;
     marioObj->oMarioPoleYawVel = 0;
     if (m->actionArg == 0) {
         set_mario_animation(m, MARIO_ANIM_START_HANDSTAND);
@@ -643,13 +654,15 @@ s32 act_ledge_climb_fast(struct MarioState *m) {
     return FALSE;
 }
 
+// add a timer to this, if the time runs out, just throw mario
 s32 act_grabbed(struct MarioState *m) {
-    if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK2) {
+    m->grabtimer++;
+    if ((m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK2) || m->grabtimer > 200) {
         s32 thrown = (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK6) == 0;
 
         m->faceAngle[1] = m->usedObj->oMoveAngleYaw;
         vec3f_copy(m->pos, m->marioObj->header.gfx.pos);
-
+        m->grabtimer = 0;
         return set_mario_action(m, (m->forwardVel >= 0.0f) ? ACT_THROWN_FORWARD : ACT_THROWN_BACKWARD,
                                 thrown);
     }
@@ -754,9 +767,11 @@ s32 act_bubbled(struct MarioState *m) {
     f32 floorHeight;
     f32 ceilOffset;
     int i;
+    struct Object *oMar;
+    f32 dist;
+    Vec3f backupPos;
     m->thisPlayerCamera->cutscene = 0;
-
-
+    m->heldObj = NULL;
     if (m->bubble == NULL) {
         m->bubble = spawn_object(m->marioObj, MODEL_BUBBLE, bhvBubbleJail);
         m->vel[1] = 0;
@@ -771,11 +786,7 @@ s32 act_bubbled(struct MarioState *m) {
     if (m->controller->buttonDown & B_BUTTON) {
         m->vel[1] -= 2.f;
     }
-    m->pos[0] += m->vel[0];
-    m->pos[1] += m->vel[1];
-    m->pos[2] += m->vel[2];
-    mag2 = sqrtf(m->vel[0] * m->vel[0] + m->vel[2] * m->vel[2]) * 10;
-    m->angleVel[1] = approach_s16_symmetric(m->angleVel[1], atan2s(m->vel[2], m->vel[0]), (int) mag2);
+    mag2 = sqrtf(m->vel[0] * m->vel[0] + m->vel[2] * m->vel[2]) * 100;
     m->thisPlayerCamera->pos[1] = (m->pos[1] + 200.f);
     for (i = 0; i < 3; i++) {
         if (m->vel[i] > 40.f) {
@@ -785,13 +796,24 @@ s32 act_bubbled(struct MarioState *m) {
             m->vel[i] = -40.f;
         }
     }
-
+    m->squishTimer = 0;
     m->vel[0] = approach_f32(m->vel[0], 0, 1, 1);
     m->vel[1] = approach_f32(m->vel[1], 0, 1, 1);
     m->vel[2] = approach_f32(m->vel[2], 0, 1, 1);
+    backupPos[0] = m->pos[0];
+    backupPos[1] = m->pos[1];
+    backupPos[2] = m->pos[2];
+    m->pos[0] += m->vel[0];
+    m->pos[1] += m->vel[1];
+    m->pos[2] += m->vel[2];
 
     m->wall = resolve_and_return_wall_collisions(m->pos, 10.0f, 120.0f);
     floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor) + 20.f;
+    if (!floor) {
+        m->pos[0] = backupPos[0];
+        m->pos[1] = backupPos[1];
+        m->pos[2] = backupPos[2];
+    }
     if (m->pos[1] < floorHeight) {
         m->pos[1] = floorHeight;
         m->vel[1] = 0;
@@ -800,6 +822,45 @@ s32 act_bubbled(struct MarioState *m) {
     if (m->pos[1] > (ceilHeight)) {
         m->pos[1] = ceilHeight;
         m->vel[1] = 0;
+    }
+    backupPos[0] = m->pos[0];
+    backupPos[1] = m->pos[1];
+    backupPos[2] = m->pos[2];
+    // get dragged towards other player relative to how far away you are, give it a max speed so you
+    // cant go through walls
+    if ((oMar = obj_nearest_object_with_behavior(segmented_to_virtual(bhvMario))) == NULL) {
+        oMar = gMarioStates[(m->thisPlayerCamera->cameraID) ^ 1].marioObj;
+    }
+    dist = dist_between_objects(oMar, m->marioObj);
+    if (dist > 2000.f) {
+        m->pos[0] += ((oMar->oPosX - m->pos[0]) / dist * (dist - 2000.f) / 25.f * (dist < 4000.f)
+                      + 80.f * (oMar->oPosX - m->pos[0]) / dist * (dist > 4000.f));
+        m->pos[1] += ((oMar->oPosY - m->pos[1]) / dist * (dist - 2000.f) / 25.f * (dist < 4000.f)
+                      + 80.f * (oMar->oPosY - m->pos[1]) / dist * (dist > 4000.f));
+        m->pos[2] += ((oMar->oPosZ - m->pos[2]) / dist * (dist - 2000.f) / 25.f * (dist < 4000.f)
+                      + 80.f * (oMar->oPosZ - m->pos[2]) / dist * (dist > 4000.f));
+    }
+
+    // do this again so no moving through walls
+    m->wall = resolve_and_return_wall_collisions(m->pos, 10.0f, 120.0f);
+    floorHeight = find_floor(m->pos[0], m->pos[1], m->pos[2], &floor) + 20.f;
+    if (!floor) {
+        m->pos[0] = backupPos[0];
+        m->pos[1] = backupPos[1];
+        m->pos[2] = backupPos[2];
+    } else if (m->pos[1] < floorHeight) {
+        m->pos[1] = floorHeight;
+        m->vel[1] = 0;
+        m->pos[0] = backupPos[0];
+        m->pos[2] = backupPos[2];
+    }
+    ceilHeight = vec3f_find_ceil(m->pos, floorHeight, &ceil) - 200.f;
+    if (m->pos[1] > (ceilHeight)) {
+        m->pos[1] = ceilHeight;
+        m->vel[1] = 0;
+        m->vel[1] = 0;
+        m->pos[0] = backupPos[0];
+        m->pos[2] = backupPos[2];
     }
 
     vec3f_copy(&m->marioObj->oPosX, m->pos);
@@ -819,16 +880,15 @@ s32 act_bubbled(struct MarioState *m) {
         m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
     }
     // undo action state if touched other mario
-    if ((dist_between_objects(obj_nearest_object_with_behavior(segmented_to_virtual(bhvMario)),
-                              m->marioObj)
-         < 200.f)
-        && (m->numLives != -1)) {
-        set_mario_action(m, ACT_FREEFALL, 0);
-        play_sound(SOUND_OBJ_DEFAULT_DEATH, gDefaultSoundArgs);
-        m->bubble->activeFlags = 0;
-        m->bubble = NULL;
-        m->invincTimer = 0x20;
-        m->flags &= ~MARIO_VANISH_CAP;
+    if (oMar != NULL) {
+        if ((dist_between_objects(oMar, m->marioObj) < 200.f) && (m->numLives != -1)) {
+            set_mario_action(m, ACT_FREEFALL, 0);
+            play_sound(SOUND_OBJ_DEFAULT_DEATH, gDefaultSoundArgs);
+            m->bubble->activeFlags = 0;
+            m->bubble = NULL;
+            m->invincTimer = 0x20;
+            m->flags &= ~MARIO_VANISH_CAP;
+        }
     }
 
     return FALSE;

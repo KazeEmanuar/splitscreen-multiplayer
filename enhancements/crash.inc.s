@@ -34,7 +34,7 @@ glabel crashFont
     .align 4
 
 glabel exceptionRegContext
-    .fill 0x108
+    .fill 424+8
 
 glabel pAssertFile
     .dword 0
@@ -73,6 +73,50 @@ glabel cop0_get_badvaddr
     jr   $ra
     mfc0 $v0, $8 # COP0_BADVADDR
 
+glabel cop0_set_cause
+    jr $ra
+    mtc0 $a0, $13
+
+glabel save_fp_ctx
+la    $k0, exceptionRegContext 
+    sdc1  $f0, 0x130 ($k0)
+    sdc1  $f2, 0x138 ($k0)
+    sdc1  $f4, 0x140 ($k0)
+    sdc1  $f6, 0x148 ($k0)
+    sdc1  $f8, 0x150 ($k0)
+    sdc1  $f10, 0x158 ($k0)
+    sdc1  $f12, 0x160 ($k0)
+    sdc1  $f14, 0x168 ($k0)
+    sdc1  $f16, 0x170 ($k0)
+    sdc1  $f18, 0x178 ($k0)
+    sdc1  $f20, 0x180 ($k0)
+    sdc1  $f22, 0x188 ($k0)
+    sdc1  $f24, 0x190 ($k0)
+    sdc1  $f26, 0x198 ($k0)
+    sdc1  $f28, 0x1A0 ($k0)
+    sdc1  $f30, 0x1A8 ($k0)
+    jr $ra
+    nop
+glabel restore_fp_ctx
+la    $k0, exceptionRegContext 
+    ldc1  $f0, 0x130 ($k0)
+    ldc1  $f2, 0x138 ($k0)
+    ldc1  $f4, 0x140 ($k0)
+    ldc1  $f6, 0x148 ($k0)
+    ldc1  $f8, 0x150 ($k0)
+    ldc1  $f10, 0x158 ($k0)
+    ldc1  $f12, 0x160 ($k0)
+    ldc1  $f14, 0x168 ($k0)
+    ldc1  $f16, 0x170 ($k0)
+    ldc1  $f18, 0x178 ($k0)
+    ldc1  $f20, 0x180 ($k0)
+    ldc1  $f22, 0x188 ($k0)
+    ldc1  $f24, 0x190 ($k0)
+    ldc1  $f26, 0x198 ($k0)
+    ldc1  $f28, 0x1A0 ($k0)
+    ldc1  $f30, 0x1A8 ($k0)
+    jr $ra
+    nop
 # If the error code field of cop0's cause register is non-zero,
 # draw crash details to the screen and hang
 #
@@ -80,7 +124,6 @@ glabel cop0_get_badvaddr
 
 glabel __crash_handler_entry
     la    $k0, exceptionRegContext
-    sd    $zero, 0x018 ($k0)
     sd    $at, 0x020 ($k0)
     sd    $v0, 0x028 ($k0)
     sd    $v1, 0x030 ($k0)
@@ -122,7 +165,6 @@ glabel __crash_handler_entry
     jal   show_crash_screen_and_hang
     nop
     .end:
-    ld    $zero, 0x018 ($k0)
     ld    $at, 0x020 ($k0)
     ld    $v0, 0x028 ($k0)
     ld    $v1, 0x030 ($k0)
@@ -155,4 +197,17 @@ glabel __crash_handler_entry
     lui   $k0, %hi(__osException)
     addiu $k0, $k0, %lo(__osException)
     jr    $k0 # run the original handler
+    nop
+
+glabel cop1_get_fpcsr
+    cfc1 $v0, $31
+    nop
+    nop
+    jr $ra
+    nop
+glabel cop1_set_fpcsr
+    ctc1 $a0, $31
+    nop
+    nop
+    jr $ra
     nop

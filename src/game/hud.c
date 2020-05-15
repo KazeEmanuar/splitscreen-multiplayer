@@ -310,7 +310,7 @@ void render_hud_coins(void) {
  * Disables "X" glyph when Mario has 100 stars or more.
  */
 void render_hud_stars(void) {
-    if (gHudFlash == 1 && gGlobalTimer & 0x08) {
+    if (gHudFlash == 1 && gGlobalTimer & 0x10) {
         return;
     }
 
@@ -389,7 +389,6 @@ void render_hud_camera_status(void) {
     s32 x;
     s32 y;
     int i;
-    // gMarioStates[0].thisPlayerCamera->hudStatus;
     for (i = 0; i < activePlayers; i++) {
         if (gMarioStates[i].thisPlayerCamera == NULL) {
             return;

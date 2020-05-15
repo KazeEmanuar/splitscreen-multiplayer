@@ -76,7 +76,7 @@ void bhv_water_bomb_spawner_update(void) {
 
             if (waterBomb != NULL) {
                 // Drop farther ahead of mario when he is moving faster
-                f32 waterBombDistToMario = 28.0f * gMarioStates[0].forwardVel + 100.0f;
+                f32 waterBombDistToMario = 28.0f * gMarioStates[gMarioObject->oAnimState].forwardVel + 100.0f;
 
                 waterBomb->oAction = WATER_BOMB_ACT_INIT;
 

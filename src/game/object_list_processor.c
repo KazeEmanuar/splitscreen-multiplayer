@@ -284,6 +284,18 @@ void bhv_mario_update(void) {
     struct Object *playerHitbox;
     struct Object *playerHurtbox;
     l = gCurrentObject == gLuigiObject;
+    if (l) {
+        gCurrentObject->header.gfx.sharedChild = 0x807c0000;
+    }
+    gMarioStates[l].numStars =
+        save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
+  //      if (gMarioState->controller->buttonPressed & L_TRIG){
+   //         level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
+    //    }
+    //give stars
+    //debug
+    //get_all_stars();
+    //  gCurrentObject->header.gfx.sharedChild = 0;
     gCurrentObject->oAnimState = l;
     gMarioStates[l].marioObj = gCurrentObject;
     gMarioStates[l].marioObj->collisionData = &gMarioStates[l];
@@ -302,7 +314,6 @@ void bhv_mario_update(void) {
         }
         i++;
     }
-
     if (activePlayers > 1) {
         f32 x;
         f32 y;
@@ -334,13 +345,28 @@ void bhv_mario_update(void) {
         y = gMarioStates[l].pos[1] - gMarioStates[l ^ 1].pos[1];
         z = gMarioStates[l].pos[2] - gMarioStates[l ^ 1].pos[2];
 
-        if ((sqrtf(x * x + z * z) < 50.f) && (y > 70.f) && (y<150.f) && gMarioStates[l].vel[1]<0.f) {
-            bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
-            gMarioStates[l].flags |= gMarioStates[l^1].flags & (MARIO_VANISH_CAP | MARIO_WING_CAP | MARIO_METAL_CAP);
-            gMarioStates[l^1].flags &= ~(MARIO_VANISH_CAP | MARIO_WING_CAP | MARIO_METAL_CAP);
-            gMarioStates[l].capTimer += gMarioStates[l^1].capTimer;
-            gMarioStates[l^1].capTimer = 0;
-            //play_sound(SOUND_MARIO_WAAAOOOW, gMarioStates[l].marioObj->soundOrigin);
+        if ((sqrtf(x * x + z * z) < 80.f) && (y > 50.f) && (y < 150.f) && (gMarioStates[l].vel[1] < 0.f)
+            && (gMarioStates[l].action != ACT_INTRO_CUTSCENE)
+            && (gMarioStates[l].action != ACT_SPECIAL_DEATH_EXIT)
+            && (gMarioStates[l].action != ACT_SPECIAL_EXIT_AIRBORNE)
+            && (gMarioStates[l ^ 1].action != ACT_BUBBLED)) {
+            if (gMarioStates[l ^ 1].marioObj->header.gfx.unk38.animID == MARIO_ANIM_CROUCHING) {
+                bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
+                gMarioStates[l].vel[1] = 60.f;
+                set_mario_action( &gMarioStates[l], ACT_TWIRLING, 0);
+                /*if (gMarioStates[l].action == ACT_TWIRLING){
+                    gMarioStates[l].marioObj->header.gfx.unk38.animFrame = 0;
+                }*/
+            } else {
+                bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
+                gMarioStates[l].vel[1] = 20.f;
+            }
+            gMarioStates[l].flags |=
+                gMarioStates[l ^ 1].flags & (MARIO_VANISH_CAP | MARIO_WING_CAP | MARIO_METAL_CAP);
+            gMarioStates[l ^ 1].flags &= ~(MARIO_VANISH_CAP | MARIO_WING_CAP | MARIO_METAL_CAP);
+            gMarioStates[l].capTimer += gMarioStates[l ^ 1].capTimer;
+            gMarioStates[l ^ 1].capTimer = 0;
+            // play_sound(SOUND_MARIO_WAAAOOOW, gMarioStates[l].marioObj->soundOrigin);
             // bouncething
         }
 
@@ -411,8 +437,8 @@ s32 update_objects_during_time_stop(struct ObjectNode *objList, struct ObjectNod
 
         // Selectively unfreeze certain objects
         if (!(gTimeStopState & TIME_STOP_ALL_OBJECTS)) {
-            if ((gCurrentObject == gMarioObject)
-                || (gCurrentObject == gLuigiObject) && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
+            if (((gCurrentObject == gMarioObject) || (gCurrentObject == gLuigiObject))
+                && !(gTimeStopState & TIME_STOP_MARIO_AND_DOORS)) {
                 unfrozen = TRUE;
             }
 
@@ -624,7 +650,8 @@ void clear_objects(void) {
 
     gTHIWaterDrained = 0;
     gTimeStopState = 0;
-    gMarioObject = NULL;
+    gMarioObject = NULL; // also luigi=
+    gLuigiObject = NULL; // also luigi=
     gMarioCurrentRoom[0] = 0;
     gMarioCurrentRoom[1] = 0;
 

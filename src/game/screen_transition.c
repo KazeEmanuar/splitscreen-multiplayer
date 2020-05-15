@@ -250,16 +250,17 @@ int func_802CC108(s8 sp23, s8 sp27, u8 sp2B, struct WarpTransitionData *sp2C) {
     }
 }
 
+//draws cannon circle
 Gfx *func_802CC2E8(void) {
     Vtx *verts = alloc_display_list(4 * sizeof(*verts));
     Gfx *dlist = alloc_display_list(16 * sizeof(*dlist));
     Gfx *g = dlist;
 
     if (verts != NULL && dlist != NULL) {
-        make_vertex(verts, 0, 0, 0, -1, -1152, 1824, 0, 0, 0, 255);
-        make_vertex(verts, 1, 320, 0, -1, 1152, 1824, 0, 0, 0, 255);
-        make_vertex(verts, 2, 320, 240, -1, 1152, 192, 0, 0, 0, 255);
-        make_vertex(verts, 3, 0, 240, -1, -1152, 192, 0, 0, 0, 255);
+        make_vertex(verts, 0, 0, 0, -1, -1252, 1824, 0, 0, 0, 255);
+        make_vertex(verts, 1, 320, 0, -1, 1252, 1824, 0, 0, 0, 255);
+        make_vertex(verts, 2, 320, 240, -1, 1252, 192, 0, 0, 0, 255);
+        make_vertex(verts, 3, 0, 240, -1, -1252, 192, 0, 0, 0, 255);
 
         gSPDisplayList(g++, dl_proj_mtx_fullscreen) gDPSetCombine(g++, 0x127E24, 0xFFFFF3F9)
             gDPSetTextureFilter(g++, G_TF_BILERP) gDPSetTextureImage(g++, G_IM_FMT_IA, G_IM_SIZ_16b, 1,

@@ -28,10 +28,10 @@ void bhv_donut_platform_spawner_update(void) {
             marioSqDist = dx * dx + dy * dy + dz * dz;
 
             // dist > 1000 and dist < 2000
-            if (marioSqDist > 1000000.0f && marioSqDist < 4000000.0f) {
+            if (marioSqDist > 1000000.0f) {
                 if (spawn_object_relative(i, sDonutPlatformPositions[i][0],
                                           sDonutPlatformPositions[i][1], sDonutPlatformPositions[i][2],
-                                          o, MODEL_RR_DONUT_PLATFORM, bhvDonutPlatform)
+                                          o, 0, bhvDonutPlatform)
                     != NULL) {
                     o->oDonutPlatformSpawnerSpawnedPlatforms |= platformFlag;
                 }
@@ -53,6 +53,9 @@ void bhv_donut_platform_update(void) {
             create_sound_spawner(SOUND_GENERAL_DONUT_PLATFORM_EXPLOSION);
         }
     } else {
+        if (o->oTimer != 0) {
+            obj_set_model(MODEL_RR_DONUT_PLATFORM);
+        }
         if (o->oGravity == 0.0f) {
             if (gMarioObject->platform == o) {
                 obj_shake_y(4.0f);

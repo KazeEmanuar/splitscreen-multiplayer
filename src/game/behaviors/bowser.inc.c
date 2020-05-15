@@ -765,11 +765,11 @@ void ActionBowser3(void) {
 void func_802B5C78(void) {
     if (BITS){
         gSecondCameraFocus[0] = spawn_object(o, MODEL_STAR, &bhvGrandStar);
-        gSecondCameraFocus[1] = spawn_object(o, MODEL_STAR, &bhvGrandStar);
+        gSecondCameraFocus[1] = gSecondCameraFocus[0];
     }
     else {
         gSecondCameraFocus[0] = spawn_object(o, MODEL_BOWSER_KEY, &bhvBowserKey);
-        gSecondCameraFocus[1] = spawn_object(o, MODEL_BOWSER_KEY, &bhvBowserKey);
+        gSecondCameraFocus[1] = gSecondCameraFocus[0];
         PlaySound2(SOUND_GENERAL2_BOWSER_KEY);
     }
     gSecondCameraFocus[0]->oAngleVelYaw = o->oAngleVelYaw;
@@ -1163,7 +1163,7 @@ void bhv_bowser_init(void) {
     o->oBowserUnk1B2 = D_8032F690[level];
     o->oHealth = D_8032F694[level];
     func_802A11B4(o, 4);
-    o->oAction = 5;
+    o->oAction = 0;         //start action
     o->oBowserUnk1AE = 0;
     o->oBowserEyesShut = 0;
 }
@@ -1326,7 +1326,8 @@ void ActionFallingBowserPlatform2(void) {
     if (o->oTimer == 0 || o->oTimer == 22)
         PlaySound2(SOUND_GENERAL_BOWSER_PLATFORM_2);
     if (o->oTimer < 22) {
-        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT);
+        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT, gMarioStates[0].thisPlayerCamera);
+        set_camera_shake_2(SHAKE_2_FALLING_BITS_PLAT, gMarioStates[1].thisPlayerCamera);
         o->oVelY = 8.0f;
         o->oGravity = 0.0f;
     } else

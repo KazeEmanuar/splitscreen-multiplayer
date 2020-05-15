@@ -313,7 +313,7 @@ s32 act_sleeping(struct MarioState *m) {
         case 2: {
             sp24 = set_mario_animation(m, MARIO_ANIM_SLEEP_LYING);
 #ifndef VERSION_JP
-            play_sound_if_no_flag(m, SOUND_MARIO_SNORING3, MARIO_ACTION_SOUND_PLAYED);
+            //play_sound_if_no_flag(m, SOUND_MARIO_SNORING3, MARIO_ACTION_SOUND_PLAYED);
 #else
             if (sp24 == 2) {
                 play_sound(SOUND_MARIO_SNORING2, m->marioObj->soundOrigin);

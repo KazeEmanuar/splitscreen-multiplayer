@@ -66,7 +66,7 @@ static void enemy_lakitu_update_speed_and_angle(void) {
     }
 
     // Move faster the farther away mario is and the faster mario is moving
-    if ((minSpeed = 1.2f * gMarioStates[0].forwardVel) < 8.0f) {
+    if ((minSpeed = 1.2f * gMarioStates[gMarioObject->oAnimState].forwardVel) < 8.0f) {
         minSpeed = 8.0f;
     }
     o->oForwardVel = distToMario * 0.04f;

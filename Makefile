@@ -9,7 +9,7 @@ default: all
 # Version of the game to build
 VERSION ?= us
 # Graphics microcode used
-GRUCODE ?= f3dzex
+GRUCODE ?= f3d
 # If COMPARE is 1, check the output sha1sum when building 'all'
 COMPARE ?= 0
 # If NON_MATCHING is 1, define the NON_MATCHING macro when building

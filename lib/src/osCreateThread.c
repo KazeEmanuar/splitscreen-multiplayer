@@ -21,7 +21,7 @@ void osCreateThread(OSThread *thread, OSId id, void (*entry)(void *), void *arg,
     tmp = 0x003FFF01;
     thread->context.sr = 65283;
     thread->context.rcp = (tmp & 0x3f0000) >> 16;
-    thread->context.fpcsr = (u32) 0x01000800;
+    thread->context.fpcsr = (u32) 0x01000800;   //remove other bit
     thread->fp = 0;
     thread->state = OS_STATE_STOPPED;
     thread->flags = 0;

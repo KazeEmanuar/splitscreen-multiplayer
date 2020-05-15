@@ -4,6 +4,7 @@ s16 D_8032F460[][2] = { { 30, 0 }, { 42, 1 }, { 52, 0 },  { 64, 1 },  { 74, 0 },
                         { 86, 1 }, { 96, 0 }, { 108, 1 }, { 118, 0 }, { -1, 0 }, };
 
 void bhv_heave_ho_throw_mario_loop(void) {
+    struct MarioState *m = gMarioObject->collisionData;
     o->oParentRelativePosX = 200.0f;
     o->oParentRelativePosY = -50.0f;
     o->oParentRelativePosZ = 0.0f;
@@ -16,8 +17,8 @@ void bhv_heave_ho_throw_mario_loop(void) {
         case 2:
             PlaySound2(SOUND_OBJ_HEAVEHO_TOSSED);
             gMarioObject->oInteractStatus |= INT_STATUS_MARIO_UNK2;
-            gMarioStates->forwardVel = -45.0f;
-            gMarioStates->vel[1] = 95.0f;
+            m->forwardVel = -45.0f;
+            m->vel[1] = 95.0f;
             o->parentObj->oHeaveHoUnk88 = 0;
             break;
     }

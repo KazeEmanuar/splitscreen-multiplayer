@@ -93,10 +93,10 @@ void coffin_act_1(void) {
             o->oAction = 0;
             o->oFaceAngleRoll = 0;
         } else if (o->oTimer > 30) {
-            if (gGlobalTimer % 4 == 0) {
+            if (gGlobalTimer % 8 == 0) {
                 PlaySound2(SOUND_GENERAL_ELEVATOR_MOVE_2);
             }
-            o->oFaceAngleRoll = 400 * (gGlobalTimer % 2) - 200;
+            o->oFaceAngleRoll = 400 * (gGlobalTimer % 4) - 200;
         }
 
         o->oAngleVelPitch = 0;

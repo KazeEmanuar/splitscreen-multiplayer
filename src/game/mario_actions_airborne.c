@@ -81,13 +81,13 @@ s32 check_fall_damage(struct MarioState *m, u32 hardFallAction) {
         if (m->vel[1] < -55.0f) {
             if (fallHeight > 3000.0f) {
                 m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 16 : 24;
-                set_camera_shake(SHAKE_FALL_DAMAGE);
+                set_camera_shake(SHAKE_FALL_DAMAGE, m->thisPlayerCamera);
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->soundOrigin);
                 return drop_and_set_mario_action(m, hardFallAction, 4);
             } else if (fallHeight > damageHeight && !mario_floor_is_slippery(m)) {
                 m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 8 : 12;
                 m->squishTimer = 30;
-                set_camera_shake(SHAKE_FALL_DAMAGE);
+                set_camera_shake(SHAKE_FALL_DAMAGE, m->thisPlayerCamera);
                 play_sound(SOUND_MARIO_ATTACKED, m->marioObj->soundOrigin);
             }
         }
@@ -924,7 +924,7 @@ s32 act_ground_pound(struct MarioState *m) {
                     set_mario_action(m, ACT_GROUND_POUND_LAND, 0);
                 }
             }
-            set_camera_shake(SHAKE_GROUND_POUND);
+            set_camera_shake(SHAKE_GROUND_POUND, m->thisPlayerCamera);
         } else if (stepResult == AIR_STEP_HIT_WALL) {
             mario_set_forward_vel(m, -16.0f);
             if (m->vel[1] > 0.0f) {
@@ -1497,7 +1497,8 @@ s32 act_lava_boost(struct MarioState *m) {
     }
 
     if (m->health < 0x100) {
-        level_trigger_warp(m, WARP_OP_DEATH);
+        sSourceWarpNodeId = 0xf1;
+        level_trigger_warp(m, WARP_OP_WARP_FLOOR);
     }
 
     m->marioBodyState->eyeState = MARIO_EYES_DEAD;
@@ -1765,7 +1766,7 @@ s32 act_flying(struct MarioState *m) {
 s32 act_riding_hoot(struct MarioState *m) {
     if (!(m->input & INPUT_A_DOWN) || (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK7)) {
         m->usedObj->oInteractStatus = 0;
-        m->usedObj->oHootMarioReleaseTime = gGlobalTimer;
+        m->usedObj->oHootMarioReleaseTime = gGlobalTimer/2;
 
         play_sound_if_no_flag(m, SOUND_MARIO_UH, MARIO_MARIO_SOUND_PLAYED);
         return set_mario_action(m, ACT_FREEFALL, 0);
@@ -1980,7 +1981,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
     f32 x;
     f32 z;
     f32 magnitude;
-
+    /*
     magnitude = sqrtf((m->controller->stickX*m->controller->stickX  + m->controller->stickY*m->controller->stickY));
     magnitude = magnitude/inertiaDisplacementScale; //16.0f by default
     x = magnitude * sins(m->intendedYaw);
@@ -1995,7 +1996,7 @@ s32 mario_execute_airborne_action(struct MarioState *m) {
     }
     if (absf2(m->platformDisplacement[2]+ z) < absf2(m->platformDisplacement[2])){
         m->platformDisplacement[2]+=z;
-    }
+    }*/
 
     if (check_common_airborne_cancels(m)) {
         return TRUE;

@@ -20,6 +20,7 @@ void ActionOpenedCannon0(void) {
     if (o->oDistanceToMario < 500.0f) {
         obj_become_tangible();
         obj_enable_rendering();
+            o->oIntangibleTimer = 0;
         if (o->oInteractStatus & INT_STATUS_INTERACTED
             && (!(o->oInteractStatus
                   & INT_STATUS_TOUCHED_BOB_OMB))) // bob-omb explodes when it gets into a cannon
@@ -27,6 +28,7 @@ void ActionOpenedCannon0(void) {
             o->oAction = 4;
             o->oCannonUnk10C = 1;
             o->oCannonUnkF8 = 1;
+            o->oIntangibleTimer = -1;
         } else
             o->oInteractStatus = 0;
     } else {
@@ -112,6 +114,11 @@ u8 unused0EA1FC[] = { 2,  0,   0, 0, 0,  0,   0, 0, 63, 128, 0, 0, 2,  0,   0, 0
                       65, 160, 0, 0, 63, 128, 0, 0, 8,  0,   0, 0, 65, 32,  0, 0, 63, 128, 0, 0 };
 
 void bhv_cannon_base_loop(void) {
+    struct MarioState *m;
+    m = gMarioObject->collisionData;
+    /*if (m->action != ACT_IN_CANNON){
+        o->oAction = 0;
+    }*/
     obj_call_action_function(sOpenedCannonActions);
     if (o->oCannonUnkF8)
         o->oCannonUnkF8++;
@@ -129,11 +136,12 @@ void bhv_cannon_barrel_loop(void) {
         o->oFaceAnglePitch = o->parentObj->oMoveAnglePitch;
         if (m->action == ACT_IN_CANNON && parent->oAction == 1) {
             o->oFaceAnglePitch = m->faceAngle[0]-0x4000;
-            o->oFaceAngleYaw = gMarioObject->oMarioCannonInputYaw;
-            o->oMoveAngleYaw = gMarioObject->oMarioCannonInputYaw;
+            o->oFaceAngleYaw = m->faceAngle[1]+0x8000;
+            o->oMoveAngleYaw = m->faceAngle[1]+0x8000;
             //parent->oMoveAngleYaw = gMarioObject->oMarioCannonInputYaw;
-            parent->oFaceAngleYaw = gMarioObject->oMarioCannonInputYaw;
+            parent->oFaceAngleYaw = m->faceAngle[1]+0x8000;
         }
-    } else
-        obj_disable_rendering();
+    } else{
+       obj_disable_rendering();
+    }
 }

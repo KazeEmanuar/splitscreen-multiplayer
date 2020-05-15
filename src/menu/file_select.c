@@ -895,11 +895,6 @@ static void return_to_main_menu(s16 prevMenuButtonID, struct Object *sourceButto
                 mark_obj_for_deletion(sMainMenuButtons[buttonID]);
             }
         }
-        if (prevMenuButtonID == MENU_BUTTON_SOUND_MODE) {
-            for (buttonID = MENU_BUTTON_SOUND_MIN; buttonID < MENU_BUTTON_SOUND_MAX; buttonID++) {
-                mark_obj_for_deletion(sMainMenuButtons[buttonID]);
-            }
-        }
     }
 }
 
@@ -1088,9 +1083,6 @@ void bhv_menu_button_manager_init(void) {
         gCurrentObject, MODEL_MAIN_MENU_RED_ERASE_BUTTON, bhvMenuButton, 2134, -3500, 0, 0, 0, 0);
     sMainMenuButtons[MENU_BUTTON_ERASE]->oMenuButtonScale = 1.0f;
     // Sound mode menu button
-    sMainMenuButtons[MENU_BUTTON_SOUND_MODE] = spawn_object_rel_with_rot(
-        gCurrentObject, MODEL_MAIN_MENU_PURPLE_SOUND_BUTTON, bhvMenuButton, 6400, -3500, 0, 0, 0, 0);
-    sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonScale = 1.0f;
 
     sTextBaseAlpha = 0;
 }
@@ -1108,11 +1100,6 @@ void bhv_menu_button_manager_init(void) {
 static void check_main_menu_clicked_buttons(void) {
     // Sound mode menu is handled separately because the button ID for it
     // is not grouped with the IDs of the other submenus.
-    if (check_clicked_button(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosX,
-                             sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosY, 200.0f) == TRUE) {
-        sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
-        sSelectedButtonID = MENU_BUTTON_SOUND_MODE;
-    } else {
         // Main Menu buttons
         s8 buttonID;
         // Configure Main Menu button group
@@ -1127,7 +1114,6 @@ static void check_main_menu_clicked_buttons(void) {
                 break;
             }
         }
-    }
 
     // Play sound of the save file clicked
     switch (sSelectedButtonID) {
@@ -1155,10 +1141,6 @@ static void check_main_menu_clicked_buttons(void) {
         case MENU_BUTTON_ERASE:
             play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gDefaultSoundArgs);
             render_erase_menu_buttons(sMainMenuButtons[MENU_BUTTON_ERASE]);
-            break;
-        case MENU_BUTTON_SOUND_MODE:
-            play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gDefaultSoundArgs);
-            render_sound_mode_menu_buttons(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]);
             break;
     }
 }
@@ -1261,18 +1243,6 @@ void bhv_menu_button_manager_loop(void) {
                                         sMainMenuButtons[MENU_BUTTON_ERASE_COPY_FILE]);
             break;
 
-        case MENU_BUTTON_SOUND_MODE:
-            check_sound_mode_menu_clicked_buttons(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]);
-            break;
-        case MENU_BUTTON_STEREO:
-            return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_STEREO]);
-            break;
-        case MENU_BUTTON_MONO:
-            return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_MONO]);
-            break;
-        case MENU_BUTTON_HEADSET:
-            return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_HEADSET]);
-            break;
     }
 
     sClickPos[0] = -10000;
@@ -1473,7 +1443,7 @@ static void print_main_menu_strings(void) {
 #ifndef VERSION_JP
     sSoundTextX = get_str_x_pos_from_center(254, textSoundModes[sSoundMode], 10.0f);
 #endif
-    print_generic_string(SOUNDMODE_X1, 39, textSoundModes[sSoundMode]);
+    //print_generic_string(SOUNDMODE_X1, 39, textSoundModes[sSoundMode]);
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_end);
     // Print file names
     gSPDisplayList(gDisplayListHead++, dl_menu_ia8_text_begin);
@@ -2151,9 +2121,6 @@ static void print_file_select_strings(void) {
             break;
         case MENU_BUTTON_SCORE_FILE_D:
             print_save_file_scores(SAVE_FILE_D);
-            break;
-        case MENU_BUTTON_SOUND_MODE:
-            print_sound_mode_menu_strings();
             break;
     }
     // If all 4 save file exists, define true to sAllFilesExist to prevent more copies in copy menu

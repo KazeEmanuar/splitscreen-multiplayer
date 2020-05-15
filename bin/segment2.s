@@ -1853,6 +1853,9 @@ gsSPVertex vertex_triangle, 3, 0
 gsSP1Triangle  0,  1,  2, 0x0
 gsSPSetGeometryMode G_LIGHTING
 
+
+
+
 # There were multiple matching pairs, so I don't know if this is correct or not.
 gsDPSetRenderMode G_RM_AA_ZB_OPA_SURF, G_RM_AA_ZB_OPA_SURF2
 # It could also be one of these:

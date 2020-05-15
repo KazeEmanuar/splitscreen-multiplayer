@@ -1,0 +1,107 @@
+todo:
+#define GFX_POOL_SIZE 30400     //KAZENOTE reset this to 6400 maybe
+file select copy erase and erase buttons look fucked
+
+
+
+
+maybe fixed?:
+check if monkey is fixed
+unmapped load address PC 801914f8, RA 801814CC
+if you touch king bob omb and the other player in the same frame, you can hold the wrong person
+
+
+
+fixed:
+cannons are fucky somehow
+make cannon cam a circle
+if cannon action is interrupted, make sure to disable invisiblity. this can happen from warps.
+make hitting a wall from the bubble movement force reset the force so you can move past pillars and walls
+fast flying spin can be triggered while in level doing normal stuff. bubble related?
+ktq and penguin lost concept of cheating for clarity
+the big boos hitbox is way too big
+	most of the hitboxs are too big yeah !
+Star 1, Luigi drowning (bubble state). Mario entering sunken boat kills both players (exits with bowser screen).
+make mario drop item when being bubbled
+I went to DDD and single pressing A to swim does like a double swim thing? Can't fast swim properly.
+	- reset controller buttonpressed during frameskip
+slow stars in star select down
+slide tiemr is twice as fast
+p1 only has to read texts after stars, sometimes p2
+you can grab onto the other mario in trees
+star cutscene timestop only affect player 2
+warp in JRB just kills you
+i couldnt GP spindrift
+penguin race doesnt give star (not a bug, melon cheated)
+100c are individually split
+talking to bowser crashes, mario 2 is not in a cutscene
+big boos haunt is fucked camera wise
+sometimes its getting p2 mario instead of p1
+mario 1 went invis when entering area 3 SSL
+no bubble when dying at 0 hp from fallign off
+crash when p1 talks to penguin?			
+camera stuck in ssl
+game froze when p2 died in volcano
+check toad stars
+heave ho fucks mario 1 only
+cannon rotation is wrong
+random crash in igloo
+you can enter cannons at ocne
+bowser 1 2 3 crash the game
+make camera snap to height faster in bubble
+make max distance the bubble can go from the other player
+channel 2 sounds die sometimes? in bowser 3
+removed the boo dialog
+when you enter a new area, sometimes a random object gets copied to one of the marios positions
+castle floor trap is fucked up with rendering
+another fucked door cutscene in downstairs (its an oanimestate thing??)
+mario 1 is invisible on slides
+mario 2 kept vanishing effect after steal
+fix powermeter graphics
+add luigi
+luigi is mario during vanish cap while moving
+bubble can go out of bounds atm
+every coin above 100c is a star spawn
+make ! box spawn 2 shells
+only mario can access stop cam, both players should
+donut platforms dont show up unless luigi comes
+end cutscene only plays for mario
+player 2 can still move camera during end cutscene
+end cutscene crashes in CCM
+end cutscene is FUCKED on luigis screen (disable splitscreen)
+end cutscene stuff runs twice on the objects
+peachs voice needs to reset pitch
+so logn gay bowser wrong pitch
+sleeping fucks sound?
+bonus: make the other player bounce higher off of someone thats crouching
+you cant grab poles without diving first
+
+
+
+
+fuck it:
+camera after exiting RR is shit
+mirror doesnt work, put a wall there
+bug if you start a cutscene while the other player is in a cutscene (toad star and door) NOT SURE IF FIXED
+infinite stairs are removed
+camera bugs for the other player if one player dies during cutscene
+	(chain chomp only?)
+luigi can get stuck in air from king bob omb. put a time limit
+doors sometimes read the wrong camera and then a door gets stuck
+p2 cam zooms out when getting a star
+part of cam shake is still on P2s screen
+weird black bars in credits?->removed
+
+not replicateable:
+if one guy is game over and the other gets bubbled, game crashes?
+voices gone after death?
+going into JRB ship kills player?
+piranha plant can mute mario/luigi audio?
+cannons can trap you?
+
+
+
+
+
+notes:
+the game seems to be unable to execute obj_nearest_object with behavior after entering volcano properly=?

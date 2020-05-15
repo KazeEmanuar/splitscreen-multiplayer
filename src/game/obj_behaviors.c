@@ -356,7 +356,7 @@ void ObjUpdatePosVelXZ(void) {
 // sp1c = globalTimer
 
 void ObjSplash(s32 waterY, s32 objY) {
-    u32 globalTimer = gGlobalTimer;
+    u32 globalTimer = gGlobalTimer/2;
     if ((f32)(waterY + 30) > o->oPosY && o->oPosY > (f32)(waterY - 30)) {
         spawn_object(o, MODEL_WATER_WAVES_SURF, bhvObjectWaterWave);
         if (o->oVelY < -20.0f) {

@@ -139,8 +139,8 @@ static s16 obj_get_pitch_from_vel(void) {
  * move again.
  */
 static s32 obj_update_race_proposition_dialog(s16 dialogID) {
-    s32 dialogResponse =
-        obj_update_dialog_with_cutscene(2, DIALOG_UNK2_FLAG_0 | DIALOG_UNK2_LEAVE_TIME_STOP_ENABLED, CUTSCENE_DIALOG_2, dialogID);
+    s32 dialogResponse = obj_update_dialog_with_cutscene(
+        2, DIALOG_UNK2_FLAG_0 | DIALOG_UNK2_LEAVE_TIME_STOP_ENABLED, CUTSCENE_DIALOG_2, dialogID);
 
     if (dialogResponse == 2) {
         set_mario_npc_dialog(0);
@@ -595,40 +595,46 @@ static s32 obj_resolve_object_collisions(s32 *targetYaw) {
     f32 relativeRadius;
     f32 newCenterX;
     f32 newCenterZ;
-
+    int i;
+    int bounce = 0;
+    if (o->numCollidedObjs>4){
+        o->numCollidedObjs = 4;
+    }
     if (o->numCollidedObjs != 0) {
-        otherObject = o->collidedObjs[0];
-        if ((otherObject != gMarioObject)) {
-            //! If one object moves after collisions are detected and this code
-            //  runs, the objects can move toward each other (transport cloning)
+        for (i = 0; i < o->numCollidedObjs; i++) {
+            otherObject = o->collidedObjs[i];
+            if ((otherObject != gMarioObject)) {
+                //! If one object moves after collisions are detected and this code
+                //  runs, the objects can move toward each other (transport cloning)
 
-            dx = otherObject->oPosX - o->oPosX;
-            dz = otherObject->oPosZ - o->oPosZ;
-            angle = atan2s(dx, dz); //! This should be atan2s(dz, dx)
+                dx = otherObject->oPosX - o->oPosX;
+                dz = otherObject->oPosZ - o->oPosZ;
+                angle = atan2s(dx, dz); //! This should be atan2s(dz, dx)
 
-            radius = o->hitboxRadius;
-            otherRadius = otherObject->hitboxRadius;
-            relativeRadius = radius / (radius + otherRadius);
+                radius = o->hitboxRadius;
+                otherRadius = otherObject->hitboxRadius;
+                relativeRadius = radius / (radius + otherRadius);
 
-            newCenterX = o->oPosX + dx * relativeRadius;
-            newCenterZ = o->oPosZ + dz * relativeRadius;
+                newCenterX = o->oPosX + dx * relativeRadius;
+                newCenterZ = o->oPosZ + dz * relativeRadius;
 
-            o->oPosX = newCenterX - radius * coss(angle);
-            o->oPosZ = newCenterZ - radius * sins(angle);
+                o->oPosX = newCenterX - radius * coss(angle);
+                o->oPosZ = newCenterZ - radius * sins(angle);
 
-            otherObject->oPosX = newCenterX + otherRadius * coss(angle);
-            otherObject->oPosZ = newCenterZ + otherRadius * sins(angle);
+                otherObject->oPosX = newCenterX + otherRadius * coss(angle);
+                otherObject->oPosZ = newCenterZ + otherRadius * sins(angle);
 
-            if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
-                // Bounce off object (or it would, if the above atan2s bug
-                // were fixed)
-                *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
-                return TRUE;
+                if (targetYaw != NULL && abs_angle_diff(o->oMoveAngleYaw, angle) < 0x4000) {
+                    // Bounce off object (or it would, if the above atan2s bug
+                    // were fixed)
+                    *targetYaw = (s16)(angle - o->oMoveAngleYaw + angle + 0x8000);
+                    bounce = 1;
+                }
             }
         }
     }
 
-    return FALSE;
+    return bounce;
 }
 
 static s32 obj_bounce_off_walls_edges_objects(s32 *targetYaw) {

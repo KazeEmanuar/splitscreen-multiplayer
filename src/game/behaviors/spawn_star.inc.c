@@ -47,7 +47,7 @@ void bhv_star_spawn_init(void) {
     else
         cutscene_object(CUTSCENE_SPECIAL_STAR_SPAWN, o);
 
-    set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
+   set_time_stop_flags(TIME_STOP_ENABLED | TIME_STOP_MARIO_AND_DOORS);
     o->activeFlags |= 0x20;
     obj_become_intangible();
 }

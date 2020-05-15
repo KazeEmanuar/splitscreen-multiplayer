@@ -1549,7 +1549,7 @@ void render_dialog_triangle_choice(void) {
 #endif
 
 void render_dialog_string_color(s8 linesPerBox) {
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
 
     if (timer & 0x08) {
         return;
@@ -1937,35 +1937,14 @@ void do_cutscene_handler(void) {
     create_dl_ortho_matrix();
 
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
+    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, gCutsceneMsgFade);
 
-#ifdef VERSION_EU
-    switch (eu_get_language()) {
-        case LANGUAGE_ENGLISH:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsEn[gCutsceneMsgIndex]);
-            break;
-        case LANGUAGE_FRENCH:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsFr[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsFr[gCutsceneMsgIndex + 8]);
-            break;
-        case LANGUAGE_GERMAN:
-            x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsDe[gCutsceneMsgIndex],
-                                          10.0f);
-            print_generic_string(x, 240 - gCutsceneMsgYOffset,
-                                 gEndCutsceneStringsDe[gCutsceneMsgIndex + 16]);
-            break;
-    }
-#else
     // get the x coordinate of where the cutscene string starts.
     x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex], 10.0f);
 
+    print_generic_string(x+1, 239 - gCutsceneMsgYOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex]);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
     print_generic_string(x, 240 - gCutsceneMsgYOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex]);
-#endif
 
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_end);
 
@@ -1981,13 +1960,13 @@ void do_cutscene_handler(void) {
     // screen. if (message_duration = 50) and (msg_timer = 55)
     // then after the first 5 frames, the message will remain
     // on screen for another 50 frames until it starts fading.
-    if (gCutsceneMsgDuration + 5 < gCutsceneMsgTimer) {
+    if (gCutsceneMsgDuration*2 + 5 < gCutsceneMsgTimer) {
         gCutsceneMsgFade -= 50;
     }
 
     // like the first check, it takes 5 frames to fade out, so
     // perform a + 10 to account for the earlier check (10-5=5).
-    if (gCutsceneMsgDuration + 10 < gCutsceneMsgTimer) {
+    if (gCutsceneMsgDuration*2 + 10 < gCutsceneMsgTimer) {
         gCutsceneMsgIndex = -1;
         gCutsceneMsgFade = 0;
         gCutsceneMsgTimer = 0;
@@ -2004,7 +1983,7 @@ extern Gfx castle_grounds_seg7_us_dl_0700F2E8[];
 #ifdef VERSION_JP
 #define PEACH_MESSAGE_TIMER 170
 #else
-#define PEACH_MESSAGE_TIMER 250
+#define PEACH_MESSAGE_TIMER 500
 #endif
 
 #ifdef VERSION_JP
@@ -2124,7 +2103,7 @@ void reset_red_coins_collected(void) {
 }
 
 void change_dialog_camera_angle(void) {
-    if (select_or_activate_mario_cam(0) == CAM_ANGLE_LAKITU_MARIO) {
+    if (select_or_activate_mario_cam(0, gCurrLevelCamera) == CAM_ANGLE_LAKITU_MARIO) {
         gDialogCameraAngleIndex = CAM_ANGLE_LAKITU_MARIO;
     } else {
         gDialogCameraAngleIndex = CAM_ANGLE_LAKITU_FIXED;
@@ -2141,7 +2120,7 @@ void shade_screen(void) {
 }
 
 void print_animated_red_coin(s16 x, s16 y) {
-    s32 timer = gGlobalTimer;
+    s32 timer = gGlobalTimer/2;
 
     create_dl_translation_matrix(MENU_MTX_PUSH, x, y, 0);
     create_dl_scale_matrix(MENU_MTX_NOPUSH, 0.2f, 0.2f, 1.0f);
@@ -2349,10 +2328,12 @@ void render_pause_camera_options(s16 x, s16 y, s8 *index, s16 xIndex) {
 
     switch (index[0]) {
         case 1:
-            select_or_activate_mario_cam(1);
+            select_or_activate_mario_cam(1, gCurrentArea->marioCamera);
+            select_or_activate_mario_cam(1, gCurrentArea->luigiCamera);
             break;
         case 2:
-            select_or_activate_mario_cam(2);
+            select_or_activate_mario_cam(2, gCurrentArea->marioCamera);
+            select_or_activate_mario_cam(2, gCurrentArea->luigiCamera);
             break;
     }
 }

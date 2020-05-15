@@ -110,6 +110,13 @@ void func_802C0DF0(struct Struct802C0DF0 *a0, u8 a1) {
             sp1C->oForwardVel = 3.0f;
             sp1C->oMoveAngleYaw = gMarioObject->oMoveAngleYaw;
             o->oBehParams |= a0->unk2 << 24;
+            if (a0->behavior == bhvKoopaShell) {
+                sp1C = spawn_object(o, a0->model, a0->behavior);
+                sp1C->oVelY = 20.0f;
+                sp1C->oForwardVel = 3.0f;
+                sp1C->oMoveAngleYaw = gMarioObject->oMoveAngleYaw + 0x8000;
+                o->oBehParams |= a0->unk2 << 24;
+            }
             if (a0->model == 122)
                 o->oFlags |= 0x4000;
             break;

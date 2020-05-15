@@ -21,7 +21,7 @@ glabel castle_geo_0015B8 # 0x0E0015B8
    geo_node_start
    geo_open_node
       geo_display_list LAYER_OPAQUE, inside_castle_seg7_dl_0704A0E8
-      geo_display_list LAYER_TRANSPARENT, inside_castle_seg7_dl_0704A2E0
+      geo_display_list LAYER_OPAQUE, inside_castle_seg7_dl_0704A2E0     #was layer transparent
       geo_display_list LAYER_OPAQUE, inside_castle_seg7_dl_0704AA98
       geo_asm   0, Geo18_802D5D0C
       geo_asm 268, Geo18_802D5B98

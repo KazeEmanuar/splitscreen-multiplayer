@@ -36,6 +36,8 @@
 #include "sound_init.h"
 #include "engine/surface_collision.h"
 #include "object_list_processor.h"
+#include "game/level_update.h"
+#include "game/main_entry.h"
 
 u32 unused80339F10;
 s8 filler80339F1C[20];
@@ -263,8 +265,7 @@ void play_mario_jump_sound(struct MarioState *m) {
                        m->marioObj->soundOrigin);
         } else {
 #endif
-            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((D_80226EB8 % 3) << 16),
-                       m->marioObj->soundOrigin);
+            play_sound(SOUND_MARIO_YAH_WAH_HOO + ((D_80226EB8 % 3) << 16), m->marioObj->soundOrigin);
 #ifndef VERSION_JP
         }
 #endif
@@ -747,11 +748,11 @@ void update_mario_sound_and_camera(struct MarioState *m) {
     s32 camPreset = m->thisPlayerCamera->currPreset;
 
     if (action == ACT_FIRST_PERSON) {
-        func_80248CB8(2);
+        // func_80248CB8(2);
         gCameraMovementFlags[m->thisPlayerCamera->cameraID] &= ~CAM_MOVE_C_UP_MODE;
         func_80285BD8(m->thisPlayerCamera, -1, 1);
     } else if (action == ACT_SLEEPING) {
-        func_80248CB8(2);
+        // func_80248CB8(2);
     }
 
     if (!(action & (ACT_FLAG_SWIMMING | ACT_FLAG_METAL_WATER))) {
@@ -976,7 +977,7 @@ static u32 set_mario_action_submerged(struct MarioState *m, u32 action, UNUSED u
 /**
  * Transitions for a variety of cutscene actions.
  */
-static u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
+u32 set_mario_action_cutscene(struct MarioState *m, u32 action, UNUSED u32 actionArg) {
     switch (action) {
         case ACT_EMERGE_FROM_PIPE:
             m->vel[1] = 52.0f;
@@ -1201,7 +1202,7 @@ s32 transition_submerged_to_walking(struct MarioState *m) {
  * non-submerged action. This also applies the water surface camera preset.
  */
 s32 set_water_plunge_action(struct MarioState *m) {
-    if (m->action == ACT_BUBBLED){
+    if (m->action == ACT_BUBBLED) {
         return;
     }
     m->forwardVel = m->forwardVel / 4.0f;
@@ -1654,7 +1655,7 @@ void mario_update_hitbox_and_cap_model(struct MarioState *m) {
         //! (Pause buffered hitstun) Since the global timer increments while paused,
         //  this can be paused through to give continual invisibility. This leads to
         //  no interaction with objects.
-        if (gGlobalTimer & 1) {     //ANNOTATION
+        if (gGlobalTimer & 2) { // ANNOTATION
             m->marioObj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
         }
     }
@@ -1788,6 +1789,9 @@ void init_mario(void) {
     int i;
     Vec3s capPos;
     struct Object *capObject;
+    u8 *marioGeo;
+    int t7;
+    int t8;
     unused80339F10 = 0;
     for (i = 0; i < activePlayers; i++) {
         gMarioStates[i].actionTimer = 0;
@@ -1854,7 +1858,7 @@ void init_mario(void) {
         mario_reset_bodystate(&gMarioStates[i]);
         update_mario_info_for_cam(&gMarioStates[i]);
         gMarioStates[i].marioBodyState->unk0B = 0;
-
+        /*
         gMarioStates[i].marioObj->oPosX = gMarioStates[i].pos[0];
         gMarioStates[i].marioObj->oPosY = gMarioStates[i].pos[1];
         gMarioStates[i].marioObj->oPosZ = gMarioStates[i].pos[2];
@@ -1862,11 +1866,11 @@ void init_mario(void) {
         gMarioStates[i].marioObj->oMoveAnglePitch = gMarioStates[i].faceAngle[0];
         gMarioStates[i].marioObj->oMoveAngleYaw = gMarioStates[i].faceAngle[1];
         gMarioStates[i].marioObj->oMoveAngleRoll = gMarioStates[i].faceAngle[2];
+        */
         gMarioStates[i].numLives = 2;
         gMarioStates[i].bubble = NULL;
-        vec3f_copy(gMarioStates[i].marioObj->header.gfx.pos, gMarioStates[i].pos);
-        vec3s_set(gMarioStates[i].marioObj->header.gfx.angle, 0, gMarioStates[i].faceAngle[1], 0);
-
+        // vec3f_copy(gMarioStates[i].marioObj->header.gfx.pos, gMarioStates[i].pos);
+        // vec3s_set(gMarioStates[i].marioObj->header.gfx.angle, 0, gMarioStates[i].faceAngle[1], 0);
         if (save_file_get_cap_pos(capPos)) {
             capObject = spawn_object(gMarioStates[i].marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
 
@@ -1878,6 +1882,35 @@ void init_mario(void) {
 
             capObject->oMoveAngleYaw = 0;
         }
+    }
+    luigiData = NULL;
+    if (luigiData == NULL) {
+        luigiData = 0x80780000;
+        dma_read(0x80780000, _luigiSegmentRomStart, _luigiSegmentRomEnd);
+        marioGeo = gLoadedGraphNodes[1];
+        for (i = 0; i < 0x8000; i++) {
+            *(luigiData + i + 0x40000) = *(marioGeo + i);
+        }
+        i = 0;
+        while (i < 0x8000) {
+            t7 = loadWord((luigiData + i + 0x40000));
+            if (((t7 - (int) marioGeo) < 0x8000) && ((t7 - (int) marioGeo) >= 0)) {
+                storeWord((luigiData + i + 0x40000), ((t7 - (int) marioGeo + 0x807c0000)));
+            }
+
+            i += 4;
+        }
+        i = 0;
+        while (i < 0x2800) {
+            t7 = loadWord((luigiData + i + 0x40000));
+            if (((t7 - 0x04000000) < 0x100000) && ((t7 - 0x04000000) >= 0)) {
+                storeWord((luigiData + i + 0x40000), ((t7 - 0x04000000 + 0x00780000)));
+                repointF3D((t7 - 0x04000000 + 0x80780000));
+            }
+
+            i += 4;
+        }
+        storeWord(luigiData + 0x40030, 0x3e926666);
     }
 }
 
@@ -1894,8 +1927,6 @@ void init_mario_from_save_file(void) {
         gMarioStates[i].animation = &D_80339D10[i];
 
         gMarioStates[i].numCoins = 0;
-        gMarioStates[i].numStars =
-            save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
         gMarioStates[i].numKeys = 0;
 
         gMarioStates[i].numLives = 2;

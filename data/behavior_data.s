@@ -2461,9 +2461,9 @@ glabel bhvBowserSubDoor # 22D8
     collision_data ddd_seg7_collision_bowser_sub_door
     obj_set_float objDrawingDistance, 0x4E20
     obj_set_float objCollisionDistance, 0x4E20
+        callnative load_object_collision_modelDDD
     begin_loop
         callnative bhv_bowsers_sub_loop
-        callnative load_object_collision_model
     end_loop
 
 glabel bhvBowsersSub # 2308
@@ -2776,7 +2776,7 @@ common_boo_bhv: # 2808
     obj_set_int objIntangibleTimer, 0
     obj_set_pos
     obj_set_int objDamageOrCoinValue, 2
-    set_hitbox 0x008C, 0x0050
+    set_hitbox 0x004C, 0x0050
     obj_set_float2 0x0028, 0x003C
     obj_set_float objGraphYOffset, 30
     callnative bhv_init_room

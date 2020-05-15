@@ -16,7 +16,7 @@ static void mad_piano_act_wait(void) {
 
     if (o->oDistanceToMario < 500.0f) {
         if (o->oTimer > 20) {
-            if (gMarioStates[0].forwardVel > 10.0f) {
+            if (gMarioStates[gMarioObject->oAnimState].forwardVel > 10.0f) {
                 o->oAction = MAD_PIANO_ACT_ATTACK;
                 obj_become_tangible();
             }

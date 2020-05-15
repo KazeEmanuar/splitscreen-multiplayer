@@ -13,10 +13,11 @@ struct ObjectHitbox sKoopaShellHitbox = {
 };
 
 void func_802BCA8C(void) {
+    struct MarioState *m = gMarioObject->collisionData;
     UNUSED s32 unused;
     struct Object *drop;
     spawn_object(o, MODEL_WATER_WAVES, bhvWaterType);
-    if (gMarioStates->forwardVel > 10.0f) {
+    if (m->forwardVel > 10.0f) {
         drop = spawn_object_with_scale(o, MODEL_WHITE_PARTICLE_SMALL, bhvWaterDrops, 1.5f);
         drop->oVelY = RandomFloat() * 30.0f;
         translate_object_xz_random(drop, 110.0f);
