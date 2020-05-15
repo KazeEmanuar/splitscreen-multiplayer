@@ -289,9 +289,9 @@ void bhv_mario_update(void) {
     }
     gMarioStates[l].numStars =
         save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
-     //   if (gMarioState->controller->buttonPressed & L_TRIG){
-      //      level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
-       // }
+  //      if (gMarioState->controller->buttonPressed & L_TRIG){
+   //         level_trigger_warp(gMarioState, WARP_OP_CREDITS_START);
+    //    }
     //give stars
     //debug
     //get_all_stars();
@@ -352,7 +352,11 @@ void bhv_mario_update(void) {
             && (gMarioStates[l ^ 1].action != ACT_BUBBLED)) {
             if (gMarioStates[l ^ 1].marioObj->header.gfx.unk38.animID == MARIO_ANIM_CROUCHING) {
                 bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
-                gMarioStates[l].vel[1] = 40.f;
+                gMarioStates[l].vel[1] = 60.f;
+                set_mario_action( &gMarioStates[l], ACT_TWIRLING, 0);
+                /*if (gMarioStates[l].action == ACT_TWIRLING){
+                    gMarioStates[l].marioObj->header.gfx.unk38.animFrame = 0;
+                }*/
             } else {
                 bounce_off_object(&gMarioStates[l], gMarioStates[l ^ 1].marioObj, 80.0f);
                 gMarioStates[l].vel[1] = 20.f;

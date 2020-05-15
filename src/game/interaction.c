@@ -815,6 +815,8 @@ u32 interact_bbh_entrance(struct MarioState *m, UNUSED u32 interactType, struct 
 
 u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     u32 action;
+    int canWarp = TRUE;
+    int i;
 
     if (o->oInteractionSubtype & INT_SUBTYPE_FADING_WARP) {
         action = m->action;
@@ -833,7 +835,13 @@ u32 interact_warp(struct MarioState *m, UNUSED u32 interactType, struct Object *
             }
         }
     } else {
-        if (m->action != ACT_EMERGE_FROM_PIPE) {
+        //only allow if no other mario is in act disappeared
+        for (i=0; i<activePlayers;i++){
+            if (gMarioStates[i].action == ACT_DISAPPEARED){
+                canWarp = FALSE;
+            }
+        }
+        if ((m->action != ACT_EMERGE_FROM_PIPE) && canWarp) {
             o->oInteractStatus = INT_STATUS_INTERACTED;
             m->interactObj = o;
             m->usedObj = o;
@@ -1455,7 +1463,7 @@ u32 check_object_grab_mario(struct MarioState *m, UNUSED u32 interactType, struc
 u32 interact_pole(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     s32 actionId = m->action & ACT_ID_MASK;
     if (actionId >= 0x080 && actionId < 0x0A0) {
-        if (!(m->prevAction & ACT_FLAG_ON_POLE) || m->usedObj != o) {
+        if (!(m->prevAction & ACT_FLAG_ON_POLE) || m->marioObj->header.gfx.unk38.animFrame>8) {
             u32 lowSpeed = m->forwardVel <= 10.0f;
             struct Object *marioObj = m->marioObj;
 

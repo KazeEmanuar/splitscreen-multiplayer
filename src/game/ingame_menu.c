@@ -1937,11 +1937,13 @@ void do_cutscene_handler(void) {
     create_dl_ortho_matrix();
 
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_begin);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
+    gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, gCutsceneMsgFade);
 
     // get the x coordinate of where the cutscene string starts.
     x = get_str_x_pos_from_center(gCutsceneMsgXOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex], 10.0f);
 
+    print_generic_string(x+1, 239 - gCutsceneMsgYOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex]);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gCutsceneMsgFade);
     print_generic_string(x, 240 - gCutsceneMsgYOffset, gEndCutsceneStringsEn[gCutsceneMsgIndex]);
 
     gSPDisplayList(gDisplayListHead++, dl_ia8_text_end);

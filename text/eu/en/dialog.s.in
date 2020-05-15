@@ -7,18 +7,16 @@ Dialog000: # 0x19000000
         "Stars that Bowser stole\n"
         "inside the painting\n"
         "worlds.\n"
-        "First, talk to the\n"
-        "Bob-omb Buddy. (Press [B]\n"
-        "to talk.) He'll certainly\n"
-        "help you out, and so will\n"
-        "his friends in other\n"
-        "areas.\n"
-        "To read signs, stop, face\n"
-        "them and press [B]. Press [A]\n"
-        "or [B] to scroll ahead. You\n"
-        "can talk to some other\n"
-        "characters by facing them\n"
-        "and pressing [B].")
+        "Make sure to help out\n"
+        "each other!\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "You can give your buddy\n"
+        "a boost by letting him\n"
+        "bounce while you crouch\n"
+        "using the [Z] button!\n")
 
 .balign 4
 Dialog001: # 0x19000174

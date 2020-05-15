@@ -423,7 +423,7 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
 
     m->actionState++;
     if (m->actionState == 2) {
-        enable_time_stop();
+        //enable_time_stop();
     }
     if (m->actionState < 9) {
         set_mario_animation(m, m->prevAction == ACT_STAR_DANCE_WATER ? MARIO_ANIM_WATER_IDLE
@@ -452,7 +452,7 @@ s32 act_reading_automatic_dialog(struct MarioState *m) {
         }
         // finished action
         else if (m->actionState == 25) {
-            disable_time_stop();
+            //disable_time_stop();
             if (gShouldNotPlayCastleMusic) {
                 gShouldNotPlayCastleMusic = FALSE;
                 play_cutscene_music(SEQUENCE_ARGS(0, SEQ_LEVEL_INSIDE_CASTLE));
@@ -556,11 +556,13 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
     } else if (m->actionState == 2 && is_anim_at_end(m)) {
         disable_time_stop();
         func_80248D90();
-        dialogID = get_star_collection_dialog(m);
+       // dialogID = get_star_collection_dialog(m);
+       dialogID = 0;
         if (dialogID != 0) {
             // look up for dialog
-            set_mario_action(&gMarioStates[0], ACT_READING_AUTOMATIC_DIALOG, dialogID);
-            set_mario_action(&gMarioStates[1], ACT_READING_AUTOMATIC_DIALOG, dialogID);
+            //set_mario_action(&gMarioStates[0], ACT_READING_AUTOMATIC_DIALOG, dialogID);
+            //set_mario_action(&gMarioStates[1], ACT_READING_AUTOMATIC_DIALOG, dialogID);
+            set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);
         } else {
             set_mario_action(m, isInWater ? ACT_WATER_IDLE : ACT_IDLE, 0);
         }

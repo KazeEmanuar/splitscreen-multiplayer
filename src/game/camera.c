@@ -6776,7 +6776,9 @@ CmdRet CutscenePrepareCannon0_1(struct LevelCamera *c) {
     func_80290144(c);
     vec3f_copy(D_8033B6F0[0][c->cameraID].unk4, c->focus);
     D_8033B6F0[2][c->cameraID].unk4[0] = 30.f;
-    object_pos_to_vec3f(D_8033B6F0[3][c->cameraID].unk4, gCutsceneFocus[c->cameraID]);
+    if (gCutsceneFocus[c->cameraID]) {
+        object_pos_to_vec3f(D_8033B6F0[3][c->cameraID].unk4, gCutsceneFocus[c->cameraID]);
+    }
     vec3s_set(D_8033B6F0[5][c->cameraID].unk1C, 0, 0, 0);
 }
 
@@ -8226,9 +8228,9 @@ CmdRet CutsceneDoorAB_2(struct LevelCamera *c) {
 
 // Cutscene Tables KISSY extend the camera when she kisses mario
 struct CutsceneTableEntry TableCutscenePeachEnd[12] = {
-    { CutscenePeachEnd0, 340 }, { CutscenePeachEnd1, 140 },    { CutscenePeachEnd2, 150 },
+    { CutscenePeachEnd0, 340 }, { CutscenePeachEnd1, 140 },   { CutscenePeachEnd2, 150 },
     { CutscenePeachEnd3, 772 }, { CutscenePeachEnd4, 278 },   { CutscenePeachEnd5, 1080 },
-    { CutscenePeachEnd6, 190 },  { CutscenePeachEnd7, 850 },   { CutscenePeachEnd8, 472 },
+    { CutscenePeachEnd6, 190 }, { CutscenePeachEnd7, 850 },   { CutscenePeachEnd8, 472 },
     { CutscenePeachEnd9, 490 }, { CutscenePeachEndA, 32767 }, { CutscenePeachEndB, 0 }
 };
 
